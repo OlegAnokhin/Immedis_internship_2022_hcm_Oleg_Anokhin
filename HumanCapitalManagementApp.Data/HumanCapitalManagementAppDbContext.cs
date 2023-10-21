@@ -1,10 +1,10 @@
-﻿using HumanCapitalManagementApp.Data.Configuration;
-
-namespace HumanCapitalManagementApp.Data
+﻿namespace HumanCapitalManagementApp.Data
 {
+
     using Microsoft.EntityFrameworkCore;
 
     using Models;
+    using Configuration;
 
     public class HumanCapitalManagementAppDbContext : DbContext
     {
