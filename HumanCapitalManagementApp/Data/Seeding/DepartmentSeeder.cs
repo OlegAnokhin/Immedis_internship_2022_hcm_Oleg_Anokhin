@@ -12,28 +12,28 @@
             currentDepartment = new Department()
             {
                 Id = 1,
-                Name = "Architects"
+                Name = "Architect"
             };
             departments.Add(currentDepartment);
 
             currentDepartment = new Department()
             {
                 Id = 2,
-                Name = "Developers"
+                Name = "Developer"
             };
             departments.Add(currentDepartment);
 
             currentDepartment = new Department()
             {
                 Id = 3,
-                Name = "UI/UX Designers"
+                Name = "UI/UX Designer"
             };
             departments.Add(currentDepartment);
 
             currentDepartment = new Department()
             {
                 Id = 4,
-                Name = "Testers"
+                Name = "Tester"
             };
             departments.Add(currentDepartment);
 
