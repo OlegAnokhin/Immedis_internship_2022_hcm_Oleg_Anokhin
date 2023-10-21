@@ -1,6 +1,10 @@
+using HumanCapitalManagementApp.Services;
+
 namespace HumanCapitalManagementApp
 {
     using Microsoft.EntityFrameworkCore;
+
+    using Services.Interfaces;
     
     using Data;
 
@@ -19,6 +23,8 @@ namespace HumanCapitalManagementApp
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             var app = builder.Build();
 

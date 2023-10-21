@@ -1,0 +1,48 @@
+﻿@model IEnumerable<AllEmployeesViewModel>
+@{
+    ViewData["Title"] = "All Employees";
+}
+<h2 id="title" class="text-center">@ViewData["Title"]</h2>
+<hr />
+@if (Model.Count() < 1)
+{
+    <h2>There are no registered Employees.</h2>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th><p>Id</p></th>
+            <th><p>Fullname</p></th>
+            <th><p>HireDate</p></th>
+            <th><p>Position</p></th>
+            <th><p>Department</p></th>
+            <th><p>User IsHired</p></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td><p>@user.Id</p></td>
+                <td><p>@user.FirstName @user.LastName</p></td>
+                <td><p>@user.HireDate</p></td>
+                <td><p>@user.Position</p></td>
+                <td><p>@user.Department</p></td>
+                <td><p>@user.IsHired</p></td>
+                <td>
+                    @if (user.IsHired)
+                    {
+                        <label>✔</label>
+                    }
+                    else
+                    {
+                        <label class="text-center">❌</label>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

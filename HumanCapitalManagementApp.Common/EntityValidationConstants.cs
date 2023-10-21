@@ -7,6 +7,10 @@
             public const int UserNameMinLength = 2;
             public const int UserNameMaxLength = 20;
 
+            public const string PasswordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{7,}$";
+
+            public const string EmailRegex = @"^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$";
+
             public const int FirstNameMinLength = 2;
             public const int FirstNameMaxLength = 20;
 
