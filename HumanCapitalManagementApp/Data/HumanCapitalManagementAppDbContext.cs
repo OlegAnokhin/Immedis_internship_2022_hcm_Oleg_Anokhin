@@ -28,6 +28,11 @@
                 .WithOne()
                 .HasForeignKey<Employee>(e => e.EmployeeInfoId);
 
+            builder.Entity<QualificationTraining>()
+                .HasOne(qt => qt.Employee)
+                .WithMany(e => e.QualificationsTraining)
+                .HasForeignKey(qt => qt.EmployeeId);
+
             builder.Entity<Employee>()
                 .Property(e => e.HireDate)
                 .HasDefaultValueSql("GETDATE()");
@@ -45,15 +50,35 @@
                 .WithMany(e => e.LeaveRequests)
                 .HasForeignKey(lr => lr.EmployeeId);
 
+            builder.Entity<UserRole>()
+                .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            builder.Entity<UserRole>()
+                .HasOne(er => er.Employee)
+                .WithMany(e => e.UserRoles)
+                .HasForeignKey(er => er.UserId);
+
+            builder.Entity<UserRole>()
+                .HasOne(er => er.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(er => er.RoleId);
+
+            builder.Entity<PerformanceManagement>()
+                .HasOne(pm => pm.Employee)
+                .WithMany(e => e.PerformancesManagement)
+                .HasForeignKey(pm => pm.EmployeeId);
+
             base.OnModelCreating(builder);
         }
 
-        public DbSet<Admin> Admins { get; set; } = null!;
         public DbSet<Department> Departments { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<EmployeeInfo> EmployeesInfo { get; set; } = null!;
         public DbSet<LeaveRequest> LeaveRequests { get; set; } = null;
         public DbSet<Position> Positions { get; set; } = null!;
+        public DbSet<QualificationTraining> QualificationsTraining { get; set; }
+        public DbSet<PerformanceManagement> PerformanceManagement { get; set; }
+        public DbSet<Role> Roles { get; set; } = null!;
 
     }
 }

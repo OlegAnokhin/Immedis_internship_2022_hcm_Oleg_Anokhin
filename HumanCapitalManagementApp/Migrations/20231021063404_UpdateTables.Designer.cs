@@ -4,6 +4,7 @@ using HumanCapitalManagementApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanCapitalManagementApp.Migrations
 {
     [DbContext(typeof(HumanCapitalManagementAppDbContext))]
-    partial class HumanCapitalManagementAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231021063404_UpdateTables")]
+    partial class UpdateTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,68 +151,24 @@ namespace HumanCapitalManagementApp.Migrations
                     b.Property<bool>("Approved")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PaidOrUnpaidLeave")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("VacationOrSickLeave")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("LeaveRequestId");
 
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("LeaveRequests");
-                });
-
-            modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.PerformanceManagement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CompletedТraining")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ParticipationInProjects")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.Property<string>("ParticipationInTeamBuilding")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("PerformanceManagement");
                 });
 
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.Position", b =>
@@ -343,17 +301,6 @@ namespace HumanCapitalManagementApp.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.PerformanceManagement", b =>
-                {
-                    b.HasOne("HumanCapitalManagementApp.Data.Models.Employee", "Employee")
-                        .WithMany("PerformancesManagement")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.QualificationTraining", b =>
                 {
                     b.HasOne("HumanCapitalManagementApp.Data.Models.Employee", "Employee")
@@ -392,8 +339,6 @@ namespace HumanCapitalManagementApp.Migrations
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.Employee", b =>
                 {
                     b.Navigation("LeaveRequests");
-
-                    b.Navigation("PerformancesManagement");
 
                     b.Navigation("QualificationsTraining");
 

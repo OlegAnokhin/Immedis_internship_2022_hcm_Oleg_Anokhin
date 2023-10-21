@@ -12,7 +12,6 @@
 
             public const int LastNameMinLength = 2;
             public const int LastNameMaxLength = 20;
-
         }
 
         public static class Department
@@ -27,6 +26,37 @@
             public const int PositionNameMaxLength = 20;
         }
 
+        public static class QualificationTraining
+        {
+            public const int NameMinLength = 2;
+            public const int NameMaxLength = 20;
 
+            public const int DescriptionMinLength = 2;
+            public const int DescriptionMaxLength = 1024;
+        }
+        
+        public static class LeaveRequest
+        {
+            public const int VacationOrSickLeaveMinLength = 2;
+            public const int VacationOrSickLeaveMaxLength = 20;
+
+            public const int DescriptionMinLength = 2;
+            public const int DescriptionMaxLength = 1024;
+        }
+        
+        public static class PerformanceManagement
+        {
+            public const int CompletedТrainingMinLength = 2;
+            public const int CompletedТrainingMaxLength = 1024;
+            
+            public const int ParticipationInProjectsMinLength = 2;
+            public const int ParticipationInProjectsMaxLength = 1024;
+
+            public const int ParticipationInTeamBuildingMinLength = 2;
+            public const int ParticipationInTeamBuildingMaxLength = 1024;
+
+            public const int DescriptionMinLength = 2;
+            public const int DescriptionMaxLength = 1024;
+        }
     }
 }
