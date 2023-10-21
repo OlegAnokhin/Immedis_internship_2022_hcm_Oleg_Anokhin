@@ -1,4 +1,6 @@
-﻿namespace HumanCapitalManagementApp.Data
+﻿using HumanCapitalManagementApp.Data.Configuration;
+
+namespace HumanCapitalManagementApp.Data
 {
     using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,8 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new DepartmentEntityConfiguration());
+
             builder.Entity<Employee>()
                 .HasOne(e => e.Department)
                 .WithMany(d => d.Employees)

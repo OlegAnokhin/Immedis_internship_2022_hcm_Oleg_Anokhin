@@ -1,8 +1,9 @@
-using HumanCapitalManagementApp.Data;
-using Microsoft.EntityFrameworkCore;
-
 namespace HumanCapitalManagementApp
 {
+    using Microsoft.EntityFrameworkCore;
+    
+    using Data;
+
     public class Program
     {
         public static void Main(string[] args)
