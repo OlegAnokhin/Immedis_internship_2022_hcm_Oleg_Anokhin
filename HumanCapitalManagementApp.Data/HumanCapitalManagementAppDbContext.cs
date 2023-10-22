@@ -11,11 +11,25 @@
         public HumanCapitalManagementAppDbContext(DbContextOptions<HumanCapitalManagementAppDbContext> options)
             : base(options)
         {
+            if (!this.Database.IsRelational())
+            {
+                this.Database.EnsureCreated();
+            }
         }
+
+        public DbSet<Department> Departments { get; set; } = null!;
+        public DbSet<Employee> Employees { get; set; } = null!;
+        public DbSet<EmployeeInfo> EmployeesInfo { get; set; } = null!;
+        public DbSet<LeaveRequest> LeaveRequests { get; set; } = null;
+        public DbSet<Position> Positions { get; set; } = null!;
+        public DbSet<QualificationTraining> QualificationsTraining { get; set; }
+        public DbSet<PerformanceManagement> PerformanceManagement { get; set; }
+        public DbSet<Role> Roles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new DepartmentEntityConfiguration());
+            builder.ApplyConfiguration(new PositionEntityConfiguration());
 
             builder.Entity<Employee>()
                 .HasOne(e => e.Department)
@@ -39,7 +53,7 @@
 
             builder.Entity<Employee>()
                 .Property(e => e.HireDate)
-                .HasDefaultValueSql("GETDATE()");
+                .HasDefaultValue(DateTime.Now);
 
             builder.Entity<Employee>()
                 .Property(p => p.Salary)
@@ -59,7 +73,7 @@
 
             builder.Entity<UserRole>()
                 .HasOne(er => er.Employee)
-                .WithMany(e => e.UserRoles)
+                .WithMany()
                 .HasForeignKey(er => er.UserId);
 
             builder.Entity<UserRole>()
@@ -74,15 +88,5 @@
 
             base.OnModelCreating(builder);
         }
-
-        public DbSet<Department> Departments { get; set; } = null!;
-        public DbSet<Employee> Employees { get; set; } = null!;
-        public DbSet<EmployeeInfo> EmployeesInfo { get; set; } = null!;
-        public DbSet<LeaveRequest> LeaveRequests { get; set; } = null;
-        public DbSet<Position> Positions { get; set; } = null!;
-        public DbSet<QualificationTraining> QualificationsTraining { get; set; }
-        public DbSet<PerformanceManagement> PerformanceManagement { get; set; }
-        public DbSet<Role> Roles { get; set; } = null!;
-
     }
 }

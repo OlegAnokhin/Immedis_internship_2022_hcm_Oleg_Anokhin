@@ -9,15 +9,18 @@
     public class EmployeeController : BaseController
     {
         private readonly IEmployeeService employeeService;
+        private readonly IPositionService positionService;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeService employeeService, IPositionService positionService)
         {
             this.employeeService = employeeService;
+            this.positionService = positionService;
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> All()
         {
+
             try
             {
                 IEnumerable<AllEmployeesViewModel> allEmployees =
@@ -25,12 +28,17 @@
 
                 return View(allEmployees);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["ErrorMessage"] = "An unexpected error occurred";
                 return RedirectToAction("Error", "Home");
             }
         }
 
+        [AllowAnonymous]
+        public IActionResult My()
+        {
+            return View();
+        }
     }
 }

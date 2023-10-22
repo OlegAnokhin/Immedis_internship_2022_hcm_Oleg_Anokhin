@@ -39,28 +39,28 @@
 
             currentPosition = new Position()
             {
-                Id = 4,
+                Id = 5,
                 Name = "Junior Designer"
             };
             positions.Add(currentPosition);
 
             currentPosition = new Position()
             {
-                Id = 4,
+                Id = 6,
                 Name = "Senior Designer"
             };
             positions.Add(currentPosition);
             
             currentPosition = new Position()
             {
-                Id = 4,
+                Id = 7,
                 Name = "Junior Tester"
             };
             positions.Add(currentPosition);
 
             currentPosition = new Position()
             {
-                Id = 4,
+                Id = 8,
                 Name = "Senior Tester"
             };
             positions.Add(currentPosition);

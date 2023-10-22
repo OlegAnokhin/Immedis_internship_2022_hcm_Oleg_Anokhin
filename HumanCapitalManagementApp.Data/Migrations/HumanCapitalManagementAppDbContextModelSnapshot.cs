@@ -251,6 +251,48 @@ namespace HumanCapitalManagementApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Positions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Internal Developer"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Junior Developer"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mid Developer"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Senior Developer"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Junior Designer"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Senior Designer"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Junior Tester"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Senior Tester"
+                        });
                 });
 
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.QualificationTraining", b =>

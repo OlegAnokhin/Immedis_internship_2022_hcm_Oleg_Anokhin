@@ -1,12 +1,10 @@
-using HumanCapitalManagementApp.Services;
-
 namespace HumanCapitalManagementApp
 {
     using Microsoft.EntityFrameworkCore;
 
-    using Services.Interfaces;
-    
     using Data;
+    using Services;
+    using Services.Interfaces;
 
     public class Program
     {
@@ -25,6 +23,9 @@ namespace HumanCapitalManagementApp
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IPositionService, PositionService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
             var app = builder.Build();
 

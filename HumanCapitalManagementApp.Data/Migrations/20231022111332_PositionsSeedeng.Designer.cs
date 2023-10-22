@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanCapitalManagementApp.Migrations
 {
     [DbContext(typeof(HumanCapitalManagementAppDbContext))]
-    [Migration("20231021063404_UpdateTables")]
-    partial class UpdateTables
+    [Migration("20231022111332_PositionsSeedeng")]
+    partial class PositionsSeedeng
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +40,28 @@ namespace HumanCapitalManagementApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Architect"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Developer"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "UI/UX Designer"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Tester"
+                        });
                 });
 
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.Employee", b =>
@@ -151,24 +173,68 @@ namespace HumanCapitalManagementApp.Migrations
                     b.Property<bool>("Approved")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PaidOrUnpaidLeave")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("VacationOrSickLeave")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("LeaveRequestId");
 
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("LeaveRequests");
+                });
+
+            modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.PerformanceManagement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CompletedТraining")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ParticipationInProjects")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("ParticipationInTeamBuilding")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("PerformanceManagement");
                 });
 
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.Position", b =>
@@ -187,6 +253,48 @@ namespace HumanCapitalManagementApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Positions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Internal Developer"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Junior Developer"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mid Developer"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Senior Developer"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Junior Designer"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Senior Designer"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Junior Tester"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Senior Tester"
+                        });
                 });
 
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.QualificationTraining", b =>
@@ -301,6 +409,17 @@ namespace HumanCapitalManagementApp.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.PerformanceManagement", b =>
+                {
+                    b.HasOne("HumanCapitalManagementApp.Data.Models.Employee", "Employee")
+                        .WithMany("PerformancesManagement")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.QualificationTraining", b =>
                 {
                     b.HasOne("HumanCapitalManagementApp.Data.Models.Employee", "Employee")
@@ -339,6 +458,8 @@ namespace HumanCapitalManagementApp.Migrations
             modelBuilder.Entity("HumanCapitalManagementApp.Data.Models.Employee", b =>
                 {
                     b.Navigation("LeaveRequests");
+
+                    b.Navigation("PerformancesManagement");
 
                     b.Navigation("QualificationsTraining");
 

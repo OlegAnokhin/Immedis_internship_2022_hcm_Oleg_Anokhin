@@ -61,9 +61,7 @@
         public List<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
 
         public List<QualificationTraining> QualificationsTraining { get; set; } = new List<QualificationTraining>();
-
-        public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
-
+        
         public List<PerformanceManagement> PerformancesManagement { get; set; } = new List<PerformanceManagement>();
     }
 }
