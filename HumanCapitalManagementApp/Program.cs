@@ -3,8 +3,8 @@ namespace HumanCapitalManagementApp
     using Microsoft.EntityFrameworkCore;
 
     using Data;
-    using Services;
     using Services.Interfaces;
+    using Web.Infrastructure;
 
     public class Program
     {
@@ -20,12 +20,9 @@ namespace HumanCapitalManagementApp
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddApplicationServices(typeof(IAccountService));
 
-            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-            builder.Services.AddScoped<IAccountService, AccountService>();
-            builder.Services.AddScoped<IPositionService, PositionService>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
@@ -36,6 +33,9 @@ namespace HumanCapitalManagementApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var scope = app.Services.CreateScope();
+            scope.ServiceProvider.GetService<HumanCapitalManagementAppDbContext>()?.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

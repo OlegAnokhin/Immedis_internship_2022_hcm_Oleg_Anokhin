@@ -5,15 +5,17 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp", "HumanCapitalManagementApp\HumanCapitalManagementApp.csproj", "{466B5D34-32E5-4E05-80ED-D6817222DC23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementApp.Data", "HumanCapitalManagementApp.Data\HumanCapitalManagementApp.Data.csproj", "{5B3764E1-7518-4D25-B45E-334A6A48AF94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.Data", "HumanCapitalManagementApp.Data\HumanCapitalManagementApp.Data.csproj", "{5B3764E1-7518-4D25-B45E-334A6A48AF94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementApp.Data.Models", "HumanCapitalManagementApp.Data.Models\HumanCapitalManagementApp.Data.Models.csproj", "{E9EC1BB8-9C43-4B5A-A39D-1D5962FF1380}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.Data.Models", "HumanCapitalManagementApp.Data.Models\HumanCapitalManagementApp.Data.Models.csproj", "{E9EC1BB8-9C43-4B5A-A39D-1D5962FF1380}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementApp.Common", "HumanCapitalManagementApp.Common\HumanCapitalManagementApp.Common.csproj", "{20771DA1-ECF5-42BA-A7E0-9A546B4B0FC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.Common", "HumanCapitalManagementApp.Common\HumanCapitalManagementApp.Common.csproj", "{20771DA1-ECF5-42BA-A7E0-9A546B4B0FC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementApp.ViewModels", "HumanCapitalManagementApp.ViewModels\HumanCapitalManagementApp.ViewModels.csproj", "{A7327F1B-C226-42CC-8AEB-2C243C418C84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.ViewModels", "HumanCapitalManagementApp.ViewModels\HumanCapitalManagementApp.ViewModels.csproj", "{A7327F1B-C226-42CC-8AEB-2C243C418C84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementApp.Services", "HumanCapitalManagementApp.Services\HumanCapitalManagementApp.Services.csproj", "{D5B591EC-3A6F-48AE-B358-99FCD2B9A9FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.Services", "HumanCapitalManagementApp.Services\HumanCapitalManagementApp.Services.csproj", "{D5B591EC-3A6F-48AE-B358-99FCD2B9A9FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementApp.Web.Infrastructure", "HumanCapitalManagementApp.Web.Infrastructure\HumanCapitalManagementApp.Web.Infrastructure.csproj", "{5F4A712B-A547-4250-8772-FDE3B4F9DC9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{D5B591EC-3A6F-48AE-B358-99FCD2B9A9FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5B591EC-3A6F-48AE-B358-99FCD2B9A9FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5B591EC-3A6F-48AE-B358-99FCD2B9A9FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F4A712B-A547-4250-8772-FDE3B4F9DC9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F4A712B-A547-4250-8772-FDE3B4F9DC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F4A712B-A547-4250-8772-FDE3B4F9DC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F4A712B-A547-4250-8772-FDE3B4F9DC9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

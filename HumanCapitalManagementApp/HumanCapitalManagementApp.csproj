@@ -22,6 +22,7 @@
     <ProjectReference Include="..\HumanCapitalManagementApp.Data\HumanCapitalManagementApp.Data.csproj" />
     <ProjectReference Include="..\HumanCapitalManagementApp.Services\HumanCapitalManagementApp.Services.csproj" />
     <ProjectReference Include="..\HumanCapitalManagementApp.ViewModels\HumanCapitalManagementApp.ViewModels.csproj" />
+    <ProjectReference Include="..\HumanCapitalManagementApp.Web.Infrastructure\HumanCapitalManagementApp.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
