@@ -52,16 +52,18 @@
         [ForeignKey(nameof(DepartmentId))]
         public Department Department { get; set; }
 
-        public int EmployeeInfoId { get; set; }
+        //public int EmployeeInfoId { get; set; }
 
-        [Required]
-        [ForeignKey(nameof(EmployeeInfoId))]
-        public EmployeeInfo EmployeeInfo { get; set; }
+        //[Required]
+        //[ForeignKey(nameof(EmployeeInfoId))]
+        //public EmployeeInfo EmployeeInfo { get; set; }
 
         public List<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
 
         public List<QualificationTraining> QualificationsTraining { get; set; } = new List<QualificationTraining>();
         
         public List<PerformanceManagement> PerformancesManagement { get; set; } = new List<PerformanceManagement>();
+
+        public List<EmployeeInfo> EmployeeInfos { get; set; } = new List<EmployeeInfo>();
     }
 }

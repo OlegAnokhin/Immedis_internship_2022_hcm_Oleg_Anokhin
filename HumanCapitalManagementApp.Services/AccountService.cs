@@ -18,25 +18,33 @@
 
         public async Task RegisterEmployeeAsync(RegisterFormModel model)
         {
-                string salt = BCrypt.GenerateSalt(12);
-                string hashedPassword = BCrypt.HashPassword(model.Password, salt);
+            string salt = BCrypt.GenerateSalt(12);
+            string hashedPassword = BCrypt.HashPassword(model.Password, salt);
 
-                Employee employee = new Employee
-                {
-                    UserName = model.UserName,
-                    HashedPassword = hashedPassword,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    HireDate = model.HireDate,
-                    PositionId = model.PositionId,
-                    Salary = model.Salary,
-                    DepartmentId = model.DepartmentId,
-                    EmployeeInfoId = model.EmployeeInfoId + 1
-                };
+            Employee employee = new Employee
+            {
+                UserName = model.UserName,
+                HashedPassword = hashedPassword,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                HireDate = model.HireDate,
+                PositionId = model.PositionId,
+                Salary = model.Salary,
+                DepartmentId = model.DepartmentId
+            };
+            try
+            {
                 await dbContext.Employees.AddAsync(employee);
                 await dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<bool> ExistByIdAsync(int id)

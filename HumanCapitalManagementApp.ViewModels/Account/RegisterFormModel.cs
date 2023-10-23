@@ -12,7 +12,6 @@
         {
             this.Positions = new HashSet<AllPositionsModel>();
             this.Departments = new HashSet<AllDepartmentsModel>();
-            this.EmployeeInfo = new HashSet<EmployeeInfoModel>();
         }
 
         [Required]
@@ -64,7 +63,8 @@
         [Display(Name = "Position")]
         public int PositionId { get; set; }
 
-        [Required] public IEnumerable<AllPositionsModel> Positions { get; set; }
+        [Required] 
+        public IEnumerable<AllPositionsModel> Positions { get; set; }
 
         [Required]
         [Display(Name = "Department")]
@@ -72,12 +72,5 @@
 
         [Required]
         public IEnumerable<AllDepartmentsModel> Departments { get; set; }
-
-        [Required]
-        [Display(Name = "Employee Info")]
-        public int EmployeeInfoId { get; set; }
-
-        [Required]
-        public IEnumerable<EmployeeInfoModel> EmployeeInfo { get; set; }
     }
 }

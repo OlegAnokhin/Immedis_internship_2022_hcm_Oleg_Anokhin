@@ -7,7 +7,7 @@
         [Key]
         public int Id { get; set; }
 
-        public string Position { get; set; } = null!;
+        public string Position { get; set; }
 
         public DateTime From { get; set; }
 
@@ -16,5 +16,7 @@
         public decimal Salary { get; set; }
 
         public int EmployeeId { get; set; }
+
+        public Employee Employee { get; set; }
     }
 }

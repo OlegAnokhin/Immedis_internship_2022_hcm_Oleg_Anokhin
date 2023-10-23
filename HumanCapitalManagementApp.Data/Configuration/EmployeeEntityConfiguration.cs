@@ -20,9 +20,10 @@
                 .HasForeignKey(e => e.PositionId);
 
             builder
-                .HasOne(e => e.EmployeeInfo)
-                .WithOne()
-                .HasForeignKey<Employee>(e => e.EmployeeInfoId);
+                .HasMany(e => e.EmployeeInfos)
+                .WithOne(ei => ei.Employee)
+                .HasForeignKey(ei => ei.EmployeeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .Property(e => e.HireDate)
