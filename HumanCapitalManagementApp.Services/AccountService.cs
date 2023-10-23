@@ -1,11 +1,13 @@
 ﻿namespace HumanCapitalManagementApp.Services
 {
+    using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
+
     using Data;
     using Data.Models;
     using Interfaces;
-    using Microsoft.EntityFrameworkCore;
     using Models.Account;
+    //using Microsoft.AspNetCore.Http;
 
     public class AccountService : IAccountService
     {
@@ -47,10 +49,28 @@
             }
         }
 
-        public async Task<bool> ExistByIdAsync(int id)
+        public async Task<bool> ExistByUsernameAsync(string username)
         {
             return await this.dbContext.Employees
-                .AnyAsync(e => e.Id == id);
+                .AnyAsync(e => e.UserName == username);
+        }
+
+        public async Task LoginEmployeeAsync(LoginFormModel model)
+        {
+            Employee employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
+
+            if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
+            {
+                
+                // Потребителският идентификатор се съхранява в сесията
+                //Session["UserId"] = user.UserId;
+
+            }
+        }
+
+        private bool VerifyPassword(string inputPassword, string hashedPassword)
+        {
+            return BCrypt.Verify(inputPassword, hashedPassword);
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿namespace HumanCapitalManagementApp.Controllers
+﻿using HumanCapitalManagementApp.Data.Models;
+
+namespace HumanCapitalManagementApp.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
     
     using Models.Account;
     using Services.Interfaces;
+    using Microsoft.EntityFrameworkCore;
 
     public class AccountController : BaseController
     {
@@ -17,12 +20,6 @@
             this.accountService = accountService;
             this.positionService = positionService;
             this.departmentService = departmentService;
-        }
-
-        [AllowAnonymous]
-        public IActionResult Login()
-        {
-            return View();
         }
 
         [HttpGet]
@@ -55,12 +52,40 @@
             try
             {
                 await accountService.RegisterEmployeeAsync(model);
-                return RedirectToAction("My", "Employee");
+                return RedirectToAction("Login", "Account");
             }
             catch (Exception)
             {
                 TempData["ErrorMessage"] = "An unexpected error occurred";
                 return RedirectToAction("Register", "Account");
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await accountService.LoginEmployeeAsync(model);
+                return RedirectToAction("SuccessLogin", "Employee");
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Invalid username or password";
+                return RedirectToAction("Login", "Account");
             }
         }
     }

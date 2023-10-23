@@ -36,7 +36,31 @@
         }
 
         [AllowAnonymous]
-        public IActionResult My()
+        public IActionResult SuccessLogin()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult AboutMe()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult LeaveRequest()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult PreviousPositions()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult QualificationTraining()
         {
             return View();
         }
