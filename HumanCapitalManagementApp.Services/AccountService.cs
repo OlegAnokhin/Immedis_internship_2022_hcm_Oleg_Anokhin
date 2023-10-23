@@ -1,14 +1,11 @@
-﻿using System.Text.RegularExpressions;
-
-namespace HumanCapitalManagementApp.Services
+﻿namespace HumanCapitalManagementApp.Services
 {
-    using Microsoft.EntityFrameworkCore;
-
-    using Data;
-    using Interfaces;
-    using Data.Models;
-    using Models.Account;
     using BCrypt.Net;
+    using Data;
+    using Data.Models;
+    using Interfaces;
+    using Microsoft.EntityFrameworkCore;
+    using Models.Account;
 
     public class AccountService : IAccountService
     {

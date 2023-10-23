@@ -31,6 +31,7 @@
         {
             RegisterFormModel model = new RegisterFormModel()
             {
+                HireDate = DateTime.Today,
                 Positions = await this.positionService.AllPositionsAsync(),
                 Departments = await this.departmentService.AllDepartmentsAsync()
             };
@@ -44,6 +45,7 @@
         {
             if (!ModelState.IsValid)
             {
+                model.HireDate = DateTime.Today;
                 model.Positions = await this.positionService.AllPositionsAsync();
                 model.Departments = await this.departmentService.AllDepartmentsAsync();
 
