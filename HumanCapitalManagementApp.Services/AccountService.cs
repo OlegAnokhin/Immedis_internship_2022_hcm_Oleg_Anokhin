@@ -1,5 +1,7 @@
-﻿namespace HumanCapitalManagementApp.Services
+﻿//[SessionState(SessionStateBehavior.Required)]
+namespace HumanCapitalManagementApp.Services
 {
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
 
@@ -7,7 +9,7 @@
     using Data.Models;
     using Interfaces;
     using Models.Account;
-    //using Microsoft.AspNetCore.Http;
+
 
     public class AccountService : IAccountService
     {
@@ -61,9 +63,13 @@
 
             if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
             {
-                
+                var userId = employee.Id.ToString();
+
+               //HttpContext.Session.Set("UserId", "userId");
+
+
                 // Потребителският идентификатор се съхранява в сесията
-                //Session["UserId"] = user.UserId;
+                // Session["UserId"] = user.UserId;
 
             }
         }

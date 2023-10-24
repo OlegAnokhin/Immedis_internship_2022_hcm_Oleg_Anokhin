@@ -1,6 +1,4 @@
-﻿using HumanCapitalManagementApp.Data.Models;
-
-namespace HumanCapitalManagementApp.Controllers
+﻿namespace HumanCapitalManagementApp.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
