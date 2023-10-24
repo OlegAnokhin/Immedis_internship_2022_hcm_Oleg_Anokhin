@@ -31,5 +31,18 @@
                 .ToListAsync();
             return allEmployees;
         }
+
+        public async Task<SuccessLoginViewModel> TakeEmployeeByIdAsync(int employeeId)
+        {
+            var model = await dbContext
+                .Employees
+                .FirstAsync(e => e.Id == employeeId);
+
+                return new SuccessLoginViewModel
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+                };
+        }
     }
 }

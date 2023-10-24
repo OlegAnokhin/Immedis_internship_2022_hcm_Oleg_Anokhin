@@ -36,9 +36,11 @@
         }
 
         [AllowAnonymous]
-        public IActionResult SuccessLogin()
+        public async Task<IActionResult> SuccessLogin(int employeeId)
         {
-            return View();
+            var employeeModel = await this.employeeService.TakeEmployeeByIdAsync(employeeId);
+
+            return View(employeeModel);
         }
 
         [AllowAnonymous]

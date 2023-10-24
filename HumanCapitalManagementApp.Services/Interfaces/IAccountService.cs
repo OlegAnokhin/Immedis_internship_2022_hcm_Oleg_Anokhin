@@ -6,10 +6,9 @@
     {
         Task RegisterEmployeeAsync(RegisterFormModel model);
 
-        Task<bool> ExistByUsernameAsync(string username);
+        Task<bool> LoginEmployeeAsync(LoginFormModel model);
 
-        Task LoginEmployeeAsync(LoginFormModel model);
-
+        Task<int> TakeIdByUsernameAsync(string username);
 
     }
 }

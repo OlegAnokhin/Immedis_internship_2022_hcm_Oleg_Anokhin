@@ -1,7 +1,5 @@
-﻿//[SessionState(SessionStateBehavior.Required)]
-namespace HumanCapitalManagementApp.Services
+﻿namespace HumanCapitalManagementApp.Services
 {
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
 
@@ -51,27 +49,21 @@ namespace HumanCapitalManagementApp.Services
             }
         }
 
-        public async Task<bool> ExistByUsernameAsync(string username)
+        public async Task<bool> LoginEmployeeAsync(LoginFormModel model)
         {
-            return await this.dbContext.Employees
-                .AnyAsync(e => e.UserName == username);
-        }
-
-        public async Task LoginEmployeeAsync(LoginFormModel model)
-        {
-            Employee employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
-
+            var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
+            
             if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
             {
-                var userId = employee.Id.ToString();
-
-               //HttpContext.Session.Set("UserId", "userId");
-
-
-                // Потребителският идентификатор се съхранява в сесията
-                // Session["UserId"] = user.UserId;
-
+                return true;
             }
+            return false;
+        }
+        public async Task<int> TakeIdByUsernameAsync(string username)
+        {
+            var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == username);
+
+            return employee.Id;
         }
 
         private bool VerifyPassword(string inputPassword, string hashedPassword)

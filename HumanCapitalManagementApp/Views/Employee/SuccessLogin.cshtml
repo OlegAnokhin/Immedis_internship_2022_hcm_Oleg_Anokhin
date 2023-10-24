@@ -1,4 +1,4 @@
-﻿@model SuccessLoginViewModel
+﻿@* @model SuccessLoginViewModel
 <div class="text-center">
     <h1>Welcome</h1>
 </div>
@@ -28,14 +28,15 @@
                class="btn btn-secondary">Leave Request</a>
         </div>
     </div>
-</div>
+</div> *@
 
         
-@* @model SuccessLoginViewModel
+@model SuccessLoginViewModel
 <div class="text-center">
     <h1 class="display-4">Welcome @Model.FirstName @Model.LastName </h1>
 </div>
-<div class="col-md-4">
+<p></p>
+<div style="display:flex; justify-content: space-between;">
     <div class="card mb-3">
         <div class="card-body text-center">
             <a asp-area="" asp-controller="Employee" asp-action="AboutMe" asp-route-id="@Model.Id"
@@ -60,4 +61,4 @@
                class="btn btn-secondary">Leave Request</a>
         </div>
     </div>
-</div> *@
+</div>

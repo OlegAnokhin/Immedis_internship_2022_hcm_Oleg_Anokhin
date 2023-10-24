@@ -78,7 +78,10 @@
             try
             {
                 await accountService.LoginEmployeeAsync(model);
-                return RedirectToAction("SuccessLogin", "Employee");
+
+                var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
+
+                return RedirectToAction("SuccessLogin", "Employee", new {EmployeeId = employeeId });
             }
             catch (Exception)
             {
