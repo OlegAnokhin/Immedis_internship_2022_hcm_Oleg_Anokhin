@@ -12,37 +12,39 @@ else
 {
     <table class="table table-striped">
         <thead>
-        <tr>
-            <th><p>Id</p></th>
-            <th><p>Fullname</p></th>
-            <th><p>HireDate</p></th>
-            <th><p>Position</p></th>
-            <th><p>Department</p></th>
-            <th><p>User IsHired</p></th>
-        </tr>
+            <tr>
+                <th><p>Id</p></th>
+                <th><p>Fullname</p></th>
+                <th><p>HireDate</p></th>
+                <th><p>Position</p></th>
+                <th><p>Department</p></th>
+                <th><p>User IsHired</p></th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td><p>@user.Id</p></td>
-                <td><p>@user.FirstName @user.LastName</p></td>
-                <td><p>@user.HireDate</p></td>
-                <td><p>@user.Position</p></td>
-                <td><p>@user.Department</p></td>
-                <td><p>@user.IsHired</p></td>
-                <td>
-                    @if (user.IsHired)
-                    {
-                        <label>✔</label>
-                    }
-                    else
-                    {
-                        <label class="text-center">❌</label>
-                    }
-                </td>
-            </tr>
-        }
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td><p>@user.Id</p></td>
+                    <td><p>@user.FirstName @user.LastName</p></td>
+                    <td><p>@user.HireDate</p></td>
+                    <td><p>@user.Position</p></td>
+                    <td><p>@user.Department</p></td>
+                    <td><p>@user.IsHired</p></td>
+                    <td>
+                        @if (user.IsHired)
+                        {
+                            <label>✔</label>
+                        }
+                        else
+                        {
+                            <label class="text-center">❌</label>
+                        }
+                    </td>
+                    <td><a asp-controller="Employee" asp-action="Details" asp-route-id="@user.Id" class="btn btn-secondary">Edit</a></td>
+                    <td><a asp-controller="Employee" asp-action="Delete" asp-route-id="@user.Id" class="btn btn-secondary" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</a></td>
+                </tr>
+            }
         </tbody>
     </table>
 }
