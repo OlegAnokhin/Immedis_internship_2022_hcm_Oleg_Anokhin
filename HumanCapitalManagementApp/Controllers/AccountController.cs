@@ -5,7 +5,6 @@
     
     using Models.Account;
     using Services.Interfaces;
-    using Microsoft.EntityFrameworkCore;
 
     public class AccountController : BaseController
     {
@@ -77,7 +76,10 @@
 
             try
             {
-                await accountService.LoginEmployeeAsync(model);
+                if (await accountService.LoginEmployeeAsync(model) == false)
+                {
+                    throw new Exception("Invalid username or password");
+                }
 
                 var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
 
@@ -88,6 +90,12 @@
                 TempData["ErrorMessage"] = "Invalid username or password";
                 return RedirectToAction("Login", "Account");
             }
+        }
+
+        [AllowAnonymous]
+        public IActionResult Logout()
+        {
+            return View();
         }
     }
 }

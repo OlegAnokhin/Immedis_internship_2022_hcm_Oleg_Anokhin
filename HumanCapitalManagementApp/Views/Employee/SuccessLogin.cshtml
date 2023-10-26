@@ -1,43 +1,51 @@
 ﻿@model SuccessLoginViewModel
-<div class="text-center">
-    <h1 class="display-4">Welcome @Model.FirstName @Model.LastName </h1>
-</div>
-<p></p>
-<div style="display:flex; justify-content: space-between;">
-    <div class="card mb-3">
-        <div class="card-body text-center">
-            <p>My profile</p>
-            <a asp-area="" asp-controller="Employee" asp-action="AboutMe" asp-route-id="@Model.Id"
-               class="btn btn-secondary">About Me</a>
+@if (Model.FirstName == null)
+{
+    <div class="text-center">
+        <h1 class="display-4">You cannot access this page without logging in.</h1>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome @Model.FirstName @Model.LastName </h1>
+    </div>
+    <p></p>
+    <div style="display:flex; justify-content: space-between;">
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <p>My profile</p>
+                <a asp-area="" asp-controller="Employee" asp-action="AboutMe" asp-route-id="@Model.Id"
+                   class="btn btn-secondary">About Me</a>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <p>Previous positions in Company</p>
+                <a asp-area="" asp-controller="Employee" asp-action="PreviousPositions" asp-route-id="@Model.Id"
+                   class="btn btn-secondary">Previous positions</a>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <p>Completed trainings</p>
+                <a asp-area="" asp-controller="Employee" asp-action="QualificationTraining" asp-route-id="@Model.Id"
+                   class="btn btn-secondary">Qualification Training</a>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <p>Information on holidays and sick leave</p>
+                <a asp-area="" asp-controller="Employee" asp-action="LeaveRequest" asp-route-id="@Model.Id"
+                   class="btn btn-secondary">Leave Request</a>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <p>For exit</p>
+                <a asp-area="" asp-controller="Account" asp-action="Logout"
+                    class="btn btn-secondary ">Logout </a>
+            </div>
         </div>
     </div>
-    <div class="card mb-3">
-        <div class="card-body text-center">
-            <p>Previous positions in Company</p>
-            <a asp-area="" asp-controller="Employee" asp-action="PreviousPositions" asp-route-id="@Model.Id"
-               class="btn btn-secondary">Previous positions</a>
-        </div>
-    </div>
-    <div class="card mb-3">
-        <div class="card-body text-center">
-            <p>Completed trainings</p>
-            <a asp-area="" asp-controller="Employee" asp-action="QualificationTraining" asp-route-id="@Model.Id"
-               class="btn btn-secondary">Qualification Training</a>
-        </div>
-    </div>
-    <div class="card mb-3">
-        <div class="card-body text-center">
-            <p>Information on holidays and sick leave</p>
-            <a asp-area="" asp-controller="Employee" asp-action="LeaveRequest" asp-route-id="@Model.Id"
-               class="btn btn-secondary">Leave Request</a>
-        </div>
-    </div>
-    <div class="card mb-3">
-        <div class="card-body text-center">
-            <p>For exit</p>
-            <a asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
-               class="btn btn-secondary">Logout
-            </a>
-        </div>
-    </div>
-</div>
+}

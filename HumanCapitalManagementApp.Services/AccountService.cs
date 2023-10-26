@@ -59,10 +59,15 @@
             }
             return false;
         }
+
         public async Task<int> TakeIdByUsernameAsync(string username)
         {
             var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == username);
 
+            if (employee == null)
+            {
+                return 0;
+            }
             return employee.Id;
         }
 
