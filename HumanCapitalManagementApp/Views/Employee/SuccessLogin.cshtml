@@ -7,31 +7,28 @@
     <div class="card mb-3">
         <div class="card-body text-center">
             <p>My profile</p>
-            <form asp-area="" asp-controller="Employee" asp-action="AboutMe" asp-route-id="@Model.EmployeeId">
-                <input type="submit" value="About Me" class="btn btn-secondary">
-            </form>
+            <a asp-area="" asp-controller="Employee" asp-action="AboutMe" asp-route-id="@Model.EmployeeId"
+               class="btn btn-secondary">About Me</a>
         </div>
     </div>
     <div class="card mb-3">
         <div class="card-body text-center">
             <p>Previous positions in Company</p>
-            <form asp-area="" asp-controller="Employee" asp-action="PreviousPositions" asp-route-id="@Model.Id"
-                  class="btn btn-secondary">
-                Previous positions
-            </form>
+            <a asp-area="" asp-controller="Employee" asp-action="PreviousPositions" asp-route-id="@Model.EmployeeId"
+               class="btn btn-secondary">Previous Positions</a>
         </div>
     </div>
     <div class="card mb-3">
         <div class="card-body text-center">
             <p>Completed trainings</p>
-            <a asp-area="" asp-controller="Employee" asp-action="QualificationTraining" asp-route-id="@Model.Id"
+            <a asp-area="" asp-controller="Employee" asp-action="QualificationTraining" asp-route-id="@Model.EmployeeId"
                class="btn btn-secondary">Qualification Training</a>
         </div>
     </div>
     <div class="card mb-3">
         <div class="card-body text-center">
             <p>Information on holidays and sick leave</p>
-            <a asp-area="" asp-controller="Employee" asp-action="LeaveRequest" asp-route-id="@Model.Id"
+            <a asp-area="" asp-controller="Employee" asp-action="LeaveRequest" asp-route-id="@Model.EmployeeId"
                class="btn btn-secondary">Leave Request</a>
         </div>
     </div>

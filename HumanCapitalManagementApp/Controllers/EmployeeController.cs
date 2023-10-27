@@ -47,7 +47,7 @@
             return View(employeeModel);
         }
 
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> AboutMe(int id)
         {
@@ -56,18 +56,23 @@
             return View(info);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> PreviousPositions(int id)
+        {
+            var info = await this.employeeService.TakeEmployeeInfoByIdAsync(id);
+
+            return View(info);
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult LeaveRequest()
         {
             return View();
         }
 
-        [AllowAnonymous]
-        public IActionResult PreviousPositions()
-        {
-            return View();
-        }
-
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult QualificationTraining()
         {
