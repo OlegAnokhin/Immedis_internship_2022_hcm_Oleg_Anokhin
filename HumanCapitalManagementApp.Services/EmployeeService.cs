@@ -50,6 +50,8 @@
         {
             var emp = await dbContext
                 .Employees
+                .Include(p => p.Position)
+                .Include(d => d.Department)
                 .FirstAsync(e => e.Id == employeeId);
 
             return new EmployeeInfoModel

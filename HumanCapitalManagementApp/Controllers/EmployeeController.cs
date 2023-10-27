@@ -47,10 +47,11 @@
             return View(employeeModel);
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> AboutMe(int employeeId)
+        public async Task<IActionResult> AboutMe(int id)
         {
-            var info = await this.employeeService.TakeEmployeeInfoByIdAsync(employeeId);
+            var info = await this.employeeService.TakeEmployeeInfoByIdAsync(id);
 
             return View(info);
         }
