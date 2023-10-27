@@ -65,7 +65,7 @@
                 Department = emp.Department.Name,
                 From = emp.HireDate,
                 To = DateTime.UtcNow,
-                Salary = 0,
+                Salary = emp.Salary,
                 EmployeeId = employeeId
             };
         }

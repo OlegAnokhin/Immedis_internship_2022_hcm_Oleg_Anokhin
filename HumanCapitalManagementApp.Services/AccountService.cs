@@ -1,4 +1,6 @@
-﻿namespace HumanCapitalManagementApp.Services
+﻿using System.Data;
+
+namespace HumanCapitalManagementApp.Services
 {
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
@@ -23,6 +25,7 @@
             string salt = BCrypt.GenerateSalt(12);
             string hashedPassword = BCrypt.HashPassword(model.Password, salt);
 
+
             Employee employee = new Employee
             {
                 UserName = model.UserName,
@@ -33,9 +36,26 @@
                 PhoneNumber = model.PhoneNumber,
                 HireDate = model.HireDate,
                 PositionId = model.PositionId,
-                Salary = model.Salary,
                 DepartmentId = model.DepartmentId
             };
+
+            var posId = employee.PositionId;
+            if (posId == 1)
+            {
+                employee.Salary = 2000;
+            }
+            else if (posId == 2 || posId == 5 || posId == 7)
+            {
+                employee.Salary = 3000;
+            }
+            else if (posId == 3)
+            {
+                employee.Salary = 4000;
+            }
+            else if (posId == 4 || posId == 6 || posId == 8)
+            {
+                employee.Salary = 5000;
+            }
             try
             {
                 await dbContext.Employees.AddAsync(employee);
@@ -44,8 +64,7 @@
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                throw new InvalidExpressionException("Unexpected error.");
             }
         }
 
