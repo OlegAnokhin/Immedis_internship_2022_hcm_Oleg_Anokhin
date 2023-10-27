@@ -20,7 +20,7 @@
         }
 
         [AllowAnonymous]
-        public IActionResult Privacy()
+        public IActionResult Error401()
         {
             return View();
         }

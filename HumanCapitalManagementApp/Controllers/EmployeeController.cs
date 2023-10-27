@@ -38,15 +38,21 @@
         [AllowAnonymous]
         public async Task<IActionResult> SuccessLogin(int employeeId)
         {
+            if (employeeId == 0)
+            {
+                return RedirectToAction("Error401", "Home");
+            }
             var employeeModel = await this.employeeService.TakeEmployeeByIdAsync(employeeId);
 
             return View(employeeModel);
         }
 
         [AllowAnonymous]
-        public IActionResult AboutMe()
+        public async Task<IActionResult> AboutMe(int employeeId)
         {
-            return View();
+            var info = await this.employeeService.TakeEmployeeInfoByIdAsync(employeeId);
+
+            return View(info);
         }
 
         [AllowAnonymous]

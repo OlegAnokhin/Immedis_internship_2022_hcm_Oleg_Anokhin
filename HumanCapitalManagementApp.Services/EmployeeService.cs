@@ -40,9 +40,32 @@
 
                 return new SuccessLoginViewModel
                 {
+                    EmployeeId = employeeId,
                     FirstName = model.FirstName,
                     LastName = model.LastName
                 };
+        }
+
+        public async Task<EmployeeInfoModel> TakeEmployeeInfoByIdAsync(int employeeId)
+        {
+            var emp = await dbContext
+                .Employees
+                .FirstAsync(e => e.Id == employeeId);
+
+            return new EmployeeInfoModel
+            {
+                UserName = emp.UserName,
+                FirstName = emp.FirstName,
+                LastName = emp.LastName,
+                Email = emp.Email,
+                PhoneNumber = emp.PhoneNumber,
+                Position = emp.Position.Name,
+                Department = emp.Department.Name,
+                From = emp.HireDate,
+                To = DateTime.UtcNow,
+                Salary = 0,
+                EmployeeId = employeeId
+            };
         }
     }
 }

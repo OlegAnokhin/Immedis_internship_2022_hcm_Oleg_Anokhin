@@ -7,5 +7,9 @@
         Task<IEnumerable<AllEmployeesViewModel>> ListAllEmployeesAsync();
 
         Task<SuccessLoginViewModel> TakeEmployeeByIdAsync(int employeeId);
+
+        Task<EmployeeInfoModel> TakeEmployeeInfoByIdAsync(int employeeId);
+
+
     }
 }

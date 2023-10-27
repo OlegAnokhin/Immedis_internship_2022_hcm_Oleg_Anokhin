@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Error Page";
+}
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+
+    <h3>You are not authorized</h3>
+    <p>
+        It seems like you dont`t have permission to use this portal.
+        Please sign in with a account.
+    </p>
+    <h3 style="font-size: 22px;">Continue:</h3> <a asp-area="" asp-controller="Account" asp-action="Login" style="font-size: 22px;">Login</a>
+</div>
