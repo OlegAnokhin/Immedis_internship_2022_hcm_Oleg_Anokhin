@@ -1,5 +1,32 @@
-﻿@{
+﻿@model IEnumerable<AllPreviousPositionsViewModel>
+@{
     ViewData["Title"] = "Previous Positions";
 }
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
+
+@foreach (var position in Model)
+{
+    <div class="row">
+        <div class="container" style="display:inline">
+            <div class="row">
+                <div class="card col-6 border-0">
+                    <p class="h5">Department: <b>@position.Department</b></p>
+                    <p></p>
+                    <p></p>
+                    <p class="h5">Position: <b>@position.Position</b></p>
+                    <p></p>
+                    <p></p>
+                    <p class="h5">From: <b>@position.From</b></p>
+                    <p></p>
+                    <p></p>
+                    <p class="h5">To: <b>@position.To</b></p>
+                    <p></p>
+                    <p></p>
+                    <p class="h5">Salary: <b>@position.Salary</b></p>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+}

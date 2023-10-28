@@ -20,7 +20,7 @@
                 .HasForeignKey(e => e.PositionId);
 
             builder
-                .HasMany(e => e.EmployeeInfos)
+                .HasMany(e => e.PreviousPositions)
                 .WithOne(ei => ei.Employee)
                 .HasForeignKey(ei => ei.EmployeeId)
                 .OnDelete(DeleteBehavior.Restrict);

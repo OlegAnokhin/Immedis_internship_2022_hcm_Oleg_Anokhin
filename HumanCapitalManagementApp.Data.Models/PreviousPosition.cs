@@ -2,10 +2,12 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class EmployeeInfo
+    public class PreviousPosition
     {
         [Key]
         public int Id { get; set; }
+
+        public string Department { get; set; }
 
         public string Position { get; set; }
 

@@ -18,7 +18,7 @@
 
         public DbSet<Department> Departments { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
-        public DbSet<EmployeeInfo> EmployeesInfo { get; set; } = null!;
+        public DbSet<PreviousPosition> PreviousPositions { get; set; } = null!;
         public DbSet<Position> Positions { get; set; } = null!;
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<QualificationTraining> QualificationsTraining { get; set; }

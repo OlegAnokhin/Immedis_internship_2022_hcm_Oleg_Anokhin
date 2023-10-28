@@ -5,13 +5,13 @@
     
     using Models;
 
-    public class EmployeeInfoEntityConfiguration : IEntityTypeConfiguration<EmployeeInfo>
+    public class PreviousPositionEntityConfiguration : IEntityTypeConfiguration<PreviousPosition>
     {
-        public void Configure(EntityTypeBuilder<EmployeeInfo> builder)
+        public void Configure(EntityTypeBuilder<PreviousPosition> builder)
         {
             builder
                 .HasOne(ei => ei.Employee)
-                .WithMany(e => e.EmployeeInfos)
+                .WithMany(e => e.PreviousPositions)
                 .HasForeignKey(ei => ei.EmployeeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
