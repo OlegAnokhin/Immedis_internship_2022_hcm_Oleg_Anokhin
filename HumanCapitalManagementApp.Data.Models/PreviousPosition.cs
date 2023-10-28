@@ -7,9 +7,9 @@
         [Key]
         public int Id { get; set; }
 
-        public string Department { get; set; }
+        public int DepartmentId { get; set; }
 
-        public string Position { get; set; }
+        public int PositionId { get; set; }
 
         public DateTime From { get; set; }
 

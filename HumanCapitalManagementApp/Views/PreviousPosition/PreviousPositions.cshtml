@@ -1,10 +1,15 @@
 ﻿@model IEnumerable<AllPreviousPositionsViewModel>
 @{
-    ViewData["Title"] = "Previous Positions";
+    ViewData["Title"] = "All Previous Positions";
 }
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
-
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <h3> No entries added.</h3>
+    </div>
+}
 @foreach (var position in Model)
 {
     <div class="row">

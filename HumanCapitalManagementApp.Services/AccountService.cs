@@ -1,8 +1,7 @@
-﻿using System.Data;
-
-namespace HumanCapitalManagementApp.Services
+﻿namespace HumanCapitalManagementApp.Services
 {
     using Microsoft.EntityFrameworkCore;
+    using System.Data;
     using BCrypt.Net;
 
     using Data;
@@ -62,7 +61,7 @@ namespace HumanCapitalManagementApp.Services
                 await dbContext.SaveChangesAsync();
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidExpressionException("Unexpected error.");
             }

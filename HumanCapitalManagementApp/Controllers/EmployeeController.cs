@@ -3,18 +3,16 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
 
-    using ViewModels.Employee;
     using Services.Interfaces;
+    using ViewModels.Employee;
 
     public class EmployeeController : BaseController
     {
         private readonly IEmployeeService employeeService;
-        private readonly IPositionService positionService;
 
-        public EmployeeController(IEmployeeService employeeService, IPositionService positionService)
+        public EmployeeController(IEmployeeService employeeService)
         {
             this.employeeService = employeeService;
-            this.positionService = positionService;
         }
 
         [AllowAnonymous]
@@ -50,15 +48,6 @@
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> AboutMe(int id)
-        {
-            var info = await this.employeeService.TakeEmployeeInfoByIdAsync(id);
-
-            return View(info);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> PreviousPositions(int id)
         {
             var info = await this.employeeService.TakeEmployeeInfoByIdAsync(id);
 
