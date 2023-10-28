@@ -44,5 +44,31 @@
             };
             return View(model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Add(int id, AddPreviousPositionsFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.From = DateTime.Today;
+                model.To = DateTime.Today;
+                model.Positions = await this.positionService.AllPositionsAsync();
+                model.Departments = await this.departmentService.AllDepartmentsAsync();
+                
+                return View(model);
+            }
+
+            try
+            {
+                await previousPositionService.AddPreviousPositionAsync(id, model);
+                return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+            }
+        }
     }
 }

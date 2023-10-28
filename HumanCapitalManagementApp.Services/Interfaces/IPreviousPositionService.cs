@@ -6,6 +6,6 @@
     {
         Task<IEnumerable<AllPreviousPositionsViewModel>> TakeAllPreviousPositionsByIdAsync(int employeeId);
 
-        Task AddPreviousPositionAsync (AddPreviousPositionsFormModel model);
+        Task AddPreviousPositionAsync (int id, AddPreviousPositionsFormModel model);
     }
 }

@@ -6,6 +6,7 @@
     using Data.Models;
     using Interfaces;
     using ViewModels.PreviousPositions;
+    using System.Data;
 
     public class PreviousPositionService : IPreviousPositionService
     {
@@ -20,22 +21,21 @@
         {
             IEnumerable<AllPreviousPositionsViewModel> allPreviousPositions = await dbContext
                 .PreviousPositions
-                .Include(e => e.Employee)
                 .Where(pp => pp.EmployeeId == employeeId)
                 .Select(p => new AllPreviousPositionsViewModel
                 {
-                    Department = p.Employee.Department.Name,
-                    Position = p.Employee.Position.Name,
-                    From = p.Employee.HireDate,
+                    //Department = p.DepartmentId,
+                    //Position = p.PositionId,
+                    From = p.From,
                     To = p.To,
-                    Salary = p.Employee.Salary,
+                    Salary = p.Salary,
                     EmployeeId = employeeId
                 })
                 .ToListAsync();
             return allPreviousPositions;
         }
 
-        public async Task AddPreviousPositionAsync(AddPreviousPositionsFormModel model)
+        public async Task AddPreviousPositionAsync(int id, AddPreviousPositionsFormModel model)
         {
             PreviousPosition position = new PreviousPosition
             {
@@ -43,8 +43,18 @@
                 PositionId = model.PositionId,
                 From = model.From,
                 To = model.To,
-                Salary = model.Salary
+                Salary = model.Salary,
+                EmployeeId = id
             };
+            try
+            {
+                await dbContext.PreviousPositions.AddAsync(position);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new InvalidExpressionException("Unexpected error.");
+            }
         }
 
     }
