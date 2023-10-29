@@ -42,12 +42,12 @@
                 .Employees
                 .FirstAsync(e => e.Id == employeeId);
 
-                return new SuccessLoginViewModel
-                {
-                    EmployeeId = employeeId,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName
-                };
+            return new SuccessLoginViewModel
+            {
+                EmployeeId = employeeId,
+                FirstName = model.FirstName,
+                LastName = model.LastName
+            };
         }
 
         public async Task<EditEmployeeViewModel> TakeEmployeeForEditByIdAsync(int employeeId)
@@ -127,6 +127,24 @@
             return await this.dbContext
                 .Employees
                 .AnyAsync(e => e.Id == employeeId);
+        }
+
+        public async Task SetIsHiredOnTrue(int id)
+        {
+            Employee employee = await this.dbContext
+                .Employees
+                .FirstAsync(e => e.Id == id);
+
+            if (employee.IsHired == false)
+            {
+                employee.IsHired = true;
+            }
+            else if (employee.IsHired == true)
+            {
+                employee.IsHired = false;
+            }
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

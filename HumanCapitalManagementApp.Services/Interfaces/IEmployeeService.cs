@@ -15,5 +15,7 @@
         Task<bool> ExistByIdAsync(int employeeId);
 
         Task EditEmployeeByIdAsync(int employeeId, EditEmployeeViewModel model);
+
+        Task SetIsHiredOnTrue(int id);
     }
 }

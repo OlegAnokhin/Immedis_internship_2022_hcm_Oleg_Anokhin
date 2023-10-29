@@ -30,15 +30,16 @@ else
                     <td><p>@user.HireDate</p></td>
                     <td><p>@user.Position</p></td>
                     <td><p>@user.Department</p></td>
-                    <td><p>@user.IsHired</p></td>
                     <td>
                         @if (user.IsHired)
                         {
                             <label>✔</label>
+                            <a asp-controller="Employee" asp-action="Hire" asp-route-id="@user.Id" method="post" class="btn btn-secondary">Fired</a>
                         }
                         else
                         {
                             <label class="text-center">❌</label>
+                            <a asp-controller="Employee" asp-action="Hire" asp-route-id="@user.Id" method="post" class="btn btn-secondary">Hired</a>
                         }
                     </td>
                     <td><a asp-controller="Employee" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-secondary">Edit</a></td>

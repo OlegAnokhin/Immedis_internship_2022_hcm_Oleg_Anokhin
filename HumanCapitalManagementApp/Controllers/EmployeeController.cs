@@ -113,6 +113,37 @@
             }
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> Hire(int id)
+        {
+            bool employeeExist = await this.employeeService
+                .ExistByIdAsync(id);
+
+            if (!employeeExist)
+            {
+                TempData["ErrorMessage"] = "Record whit this Id not exist.";
+                return RedirectToAction("Error", "Home");
+            }
+
+            try
+            {
+                await this.employeeService.SetIsHiredOnTrue(id);
+
+                string returnUrl = Request.Headers["Referer"].ToString();
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+            return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult LeaveRequest()
