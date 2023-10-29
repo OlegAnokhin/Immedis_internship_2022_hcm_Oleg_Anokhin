@@ -104,7 +104,7 @@
             try
             {
                 await this.employeeService.EditEmployeeByIdAsync(id, model);
-                return RedirectToAction("AboutMe", "Employee", new { EmployeeId = id });
+                return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
             }
             catch (Exception)
             {

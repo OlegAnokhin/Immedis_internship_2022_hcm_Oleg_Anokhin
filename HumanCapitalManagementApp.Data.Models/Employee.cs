@@ -37,18 +37,18 @@
 
         public DateTime HireDate { get; set; }
 
+        [Required]
         public int PositionId { get; set; }
 
-        [Required]
         [ForeignKey(nameof(PositionId))]
         public Position Position { get; set; }
 
         [Required]
         public decimal Salary { get; set; }
 
+        [Required]
         public int DepartmentId { get; set; }
 
-        [Required]
         [ForeignKey(nameof(DepartmentId))]
         public Department Department { get; set; }
 

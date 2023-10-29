@@ -6,6 +6,12 @@
 
     public class EditEmployeeViewModel
     {
+        public EditEmployeeViewModel()
+        {
+            this.Positions = new HashSet<AllPositionsModel>();
+            this.Departments = new HashSet<AllDepartmentsModel>();
+        }
+
         [Required]
         [StringLength(UserNameMaxLength, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
             MinimumLength = UserNameMinLength)]
@@ -49,11 +55,9 @@
         [Display(Name = "Salary")]
         public decimal Salary { get; set; }
 
-        [Required]
         [Display(Name = "From")]
         public DateTime From { get; set; }
 
-        [Required]
         [Display(Name = "To")]
         public DateTime To { get; set; }
 
