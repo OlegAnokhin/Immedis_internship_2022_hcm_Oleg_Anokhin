@@ -46,22 +46,29 @@
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = null!;
 
-        [Required]
         [Display(Name = "Salary")]
         public decimal Salary { get; set; }
+
+        [Required]
+        [Display(Name = "From")]
+        public DateTime From { get; set; }
+
+        [Required]
+        [Display(Name = "To")]
+        public DateTime To { get; set; }
 
         [Required]
         [Display(Name = "Position")]
         public int PositionId { get; set; }
 
-        [Required] 
         public IEnumerable<AllPositionsModel> Positions { get; set; }
 
         [Required]
         [Display(Name = "Department")]
         public int DepartmentId { get; set; }
 
-        [Required] 
         public IEnumerable<AllDepartmentsModel> Departments { get; set; }
+
+        public int EmployeeId { get; set; }
     }
 }

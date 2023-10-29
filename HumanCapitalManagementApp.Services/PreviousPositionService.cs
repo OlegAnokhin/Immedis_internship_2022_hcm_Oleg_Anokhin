@@ -24,8 +24,9 @@
                 .Where(pp => pp.EmployeeId == employeeId)
                 .Select(p => new AllPreviousPositionsViewModel
                 {
-                    //Department = p.DepartmentId,
-                    //Position = p.PositionId,
+                    Id = p.Id,
+                    Department = p.Department.Name,
+                    Position = p.Position.Name, 
                     From = p.From,
                     To = p.To,
                     Salary = p.Salary,
@@ -57,5 +58,20 @@
             }
         }
 
+        public async Task DeletePreviousPositionByIdAsync(int id)
+        {
+            PreviousPosition previousPosition = await this.dbContext.PreviousPositions
+                .FirstAsync(pp => pp.Id == id);
+
+            this.dbContext.PreviousPositions.Remove(previousPosition);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> ExistByIdAsync(int id)
+        {
+            return await this.dbContext
+                .PreviousPositions
+                .AnyAsync(pp => pp.Id == id);
+        }
     }
 }

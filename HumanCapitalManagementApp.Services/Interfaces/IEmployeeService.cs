@@ -10,6 +10,10 @@
 
         Task<EmployeeInfoModel> TakeEmployeeInfoByIdAsync(int employeeId);
 
+        Task<EditEmployeeViewModel> TakeEmployeeForEditByIdAsync(int employeeId);
 
+        Task<bool> ExistByIdAsync(int employeeId);
+
+        Task EditEmployeeByIdAsync(int employeeId, EditEmployeeViewModel model);
     }
 }
