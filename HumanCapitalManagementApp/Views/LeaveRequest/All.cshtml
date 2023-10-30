@@ -1,0 +1,45 @@
+﻿@model DetailsRequestsViewModel
+@{
+    ViewData["Title"] = "Leave Requests";
+}
+<h2 id="title" class="text-center">@ViewData["Title"]</h2>
+
+<hr />
+<div class="card-body text-center">
+    <p>Add new record for your leave request</p>
+    <a asp-area="" asp-controller="LeaveRequest" asp-action="Add" asp-route-id="@Model.EmployeeId"
+       class="btn btn-secondary">Add</a>
+</div>
+
+@if (Model.LeaveRequests.Any())
+{
+    <h2>Past Leaves</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Leave ID</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Type of request</th>
+            <th>Is Approved</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var leave in Model.LeaveRequests)
+        {
+            <tr>
+                <td>@leave.LeaveRequestId</td>
+                <td>@leave.From.ToShortDateString()</td>
+                <td>@leave.To.ToShortDateString()</td>
+                <td>@leave.VacationOrSickLeave</td>
+                <td>@(leave.Approved ? "Yes" : "No")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3>No added requests.</h3>
+}
