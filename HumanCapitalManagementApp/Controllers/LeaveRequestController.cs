@@ -9,10 +9,12 @@
     public class LeaveRequestController : BaseController
     {
         private readonly ILeaveRequestService leaveRequestService;
+        private readonly IEmployeeService employeeService;
 
-        public LeaveRequestController(ILeaveRequestService leaveRequestService)
+        public LeaveRequestController(ILeaveRequestService leaveRequestService, IEmployeeService employeeService)
         {
             this.leaveRequestService = leaveRequestService;
+            this.employeeService = employeeService;
         }
 
         [AllowAnonymous]
@@ -41,6 +43,44 @@
                 To = DateTime.Today
             };
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Add(int id, LeaveRequestViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            bool employeeExist = await this.employeeService.ExistByIdAsync(id);
+            
+            if (!employeeExist)
+            {
+                TempData["ErrorMessage"] = "Employee not exist";
+                return RedirectToAction("Error", "Home");
+            }
+
+            try
+            {
+                await this.leaveRequestService.AddLeaveRequestAsync(id, model);
+
+                return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+
+                //string returnUrl = Request.Headers["Referer"].ToString();
+
+                //if (!string.IsNullOrEmpty(returnUrl))
+                //{
+                //    return Redirect(returnUrl);
+                //}
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+            return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
         }
     }
 }

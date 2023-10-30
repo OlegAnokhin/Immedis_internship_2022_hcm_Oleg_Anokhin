@@ -5,5 +5,7 @@
     public interface ILeaveRequestService
     {
         Task<DetailsRequestsViewModel> AllLeaveRequestAsync(int id);
+
+        Task AddLeaveRequestAsync(int id, LeaveRequestViewModel model);
     }
 }

@@ -16,6 +16,26 @@
             this.dbContext = dbContext;
         }
 
+        public async Task AddLeaveRequestAsync(int id, LeaveRequestViewModel model)
+        {
+            Employee? employee = await this.dbContext
+                .Employees
+                .FirstAsync(e => e.Id == id);
+            LeaveRequest request = new LeaveRequest
+            {
+                EmployeeId = id,
+                StartDate = model.From,
+                EndDate = model.To,
+                VacationOrSickLeave = model.VacationOrSickLeave,
+                Description = model.Description,
+                Approved = model.Approved
+            };
+            employee.LeaveRequests.Add(request);
+
+            await dbContext.LeaveRequests.AddAsync(request);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<DetailsRequestsViewModel> AllLeaveRequestAsync(int id)
         {
             Employee? employee = await this.dbContext
@@ -28,6 +48,7 @@
                 .Where(l => l.EmployeeId == id)
                 .Select(l => new LeaveRequestViewModel
                 {
+                    LeaveRequestId = l.LeaveRequestId,
                     EmployeeId = id,
                     From = l.StartDate,
                     To = l.EndDate,

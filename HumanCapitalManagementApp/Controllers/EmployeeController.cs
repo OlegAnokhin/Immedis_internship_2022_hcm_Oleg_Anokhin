@@ -175,12 +175,6 @@
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult LeaveRequest()
-        {
-            return View();
-        }
 
         [HttpGet]
         [AllowAnonymous]
