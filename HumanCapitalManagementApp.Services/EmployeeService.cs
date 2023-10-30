@@ -146,5 +146,19 @@
 
             await this.dbContext.SaveChangesAsync();
         }
+
+        public async Task SoftDeleteEmployeeByIdAsync(int id)
+        {
+            Employee employee = await this.dbContext
+                .Employees
+                .FirstAsync(e => e.Id == id);
+
+            employee.UserName = "Fired";
+            employee.FirstName = "Fired";
+            employee.LastName = "Fired";
+            employee.IsHired = false;
+
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

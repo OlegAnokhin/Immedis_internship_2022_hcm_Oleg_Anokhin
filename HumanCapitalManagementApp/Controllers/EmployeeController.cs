@@ -144,6 +144,37 @@
             return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> Delete(int id)
+        {
+            bool existById = await this.employeeService
+                .ExistByIdAsync(id);
+
+            if (!existById)
+            {
+                TempData["ErrorMessage"] = "Record whit this Id not exist.";
+                return RedirectToAction("Error", "Home");
+            }
+
+            try
+            {
+                await this.employeeService.SoftDeleteEmployeeByIdAsync(id);
+
+                string returnUrl = Request.Headers["Referer"].ToString();
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult LeaveRequest()

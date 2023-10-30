@@ -17,5 +17,7 @@
         Task EditEmployeeByIdAsync(int employeeId, EditEmployeeViewModel model);
 
         Task SetIsHiredOnTrue(int id);
+
+        Task SoftDeleteEmployeeByIdAsync(int id);
     }
 }
