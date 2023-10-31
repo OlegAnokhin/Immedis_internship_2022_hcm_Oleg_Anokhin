@@ -1,6 +1,4 @@
-﻿using HumanCapitalManagementApp.ViewModels.Employee.Enums;
-
-namespace HumanCapitalManagementApp.Services
+﻿namespace HumanCapitalManagementApp.Services
 {
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
@@ -8,6 +6,7 @@ namespace HumanCapitalManagementApp.Services
     using Data.Models;
     using Interfaces;
     using ViewModels.Employee;
+    using ViewModels.Employee.Enums;
     using HumanCapitalManagementApp.Data;
     using HumanCapitalManagementApp.Data.Models;
 
@@ -19,24 +18,6 @@ namespace HumanCapitalManagementApp.Services
         {
             this.dbContext = dbContext;
         }
-
-        //public async Task<IEnumerable<AllEmployeesViewModel>> ListAllEmployeesAsync()
-        //{
-        //    IEnumerable<AllEmployeesViewModel> allEmployees = await dbContext
-        //        .Employees
-        //        .Select(e => new AllEmployeesViewModel()
-        //        {
-        //            Id = e.Id,
-        //            FirstName = e.FirstName,
-        //            LastName = e.LastName,
-        //            IsHired = e.IsHired,
-        //            HireDate = e.HireDate,
-        //            Position = e.Position.Name,
-        //            Department = e.Department.Name
-        //        })
-        //        .ToListAsync();
-        //    return allEmployees;
-        //}
 
         public async Task<AllEmployeesFilteredAndPagedServiceModel> AllAsync(AllEmployeesQueryModel model)
         {

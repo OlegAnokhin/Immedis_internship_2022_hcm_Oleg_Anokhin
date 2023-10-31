@@ -68,12 +68,6 @@
 
                 return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
 
-                //string returnUrl = Request.Headers["Referer"].ToString();
-
-                //if (!string.IsNullOrEmpty(returnUrl))
-                //{
-                //    return Redirect(returnUrl);
-                //}
             }
             catch (Exception)
             {

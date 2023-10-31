@@ -5,7 +5,6 @@
 
     public interface IEmployeeService
     {
-        //Task<IEnumerable<AllEmployeesViewModel>> ListAllEmployeesAsync();
         Task<AllEmployeesFilteredAndPagedServiceModel> AllAsync(AllEmployeesQueryModel model);
 
         Task<SuccessLoginViewModel> TakeEmployeeByIdAsync(int employeeId);

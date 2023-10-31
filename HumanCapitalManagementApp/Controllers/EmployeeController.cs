@@ -1,12 +1,11 @@
-﻿using HumanCapitalManagementApp.Services.Data.Models;
-
-namespace HumanCapitalManagementApp.Controllers
+﻿namespace HumanCapitalManagementApp.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
 
     using Services.Interfaces;
     using ViewModels.Employee;
+    using HumanCapitalManagementApp.Services.Data.Models;
 
     public class EmployeeController : BaseController
     {
@@ -22,24 +21,6 @@ namespace HumanCapitalManagementApp.Controllers
             this.positionService = positionService;
             this.departmentService = departmentService;
         }
-
-        //[AllowAnonymous]
-        //public async Task<IActionResult> All()
-        //{
-
-        //    try
-        //    {
-        //        IEnumerable<AllEmployeesViewModel> allEmployees =
-        //            await this.employeeService.ListAllEmployeesAsync();
-
-        //        return View(allEmployees);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        TempData["ErrorMessage"] = "An unexpected error occurred";
-        //        return RedirectToAction("Error", "Home");
-        //    }
-        //}
 
         [HttpGet]
         [AllowAnonymous]
