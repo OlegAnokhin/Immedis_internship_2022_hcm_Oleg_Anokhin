@@ -1,10 +1,110 @@
-﻿@model IEnumerable<AllEmployeesViewModel>
+﻿@model AllEmployeesQueryModel
 @{
     ViewData["Title"] = "All Employees";
 }
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
-@if (Model.Count() < 1)
+
+<form class="text-center" method="get">
+    <div class="row">
+        <div class="form-group col-md-8 d-flex justify-content-between">
+            <div class="form-group col-md-3">
+                <label id="title" asp-for="Department">Department</label>
+                <select asp-for="Department" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var department in Model.Departments)
+                    {
+                        <option value="@department">@department</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label id="title" asp-for="Position">Position</label>
+                <select asp-for="Position" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var position in Model.Positions)
+                    {
+                        <option value="@position">@position</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label id="title" asp-for="EmployeesPerPage"></label>
+                <select asp-for="EmployeesPerPage" class="form-control">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label id="title" asp-for="SearchString"></label>
+                <input asp-for="SearchString" class="form-control" placeholder="Search by Firstname">
+            </div>
+
+            <div class="form-group col-md-3">
+                <div class="form-group">
+                    <label id="title" asp-for="EmployeeSorting"></label>
+                    <select asp-for="EmployeeSorting" class="form-control">
+                        <option value="0">Newest</option>
+                        <option value="1">Oldest</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group mt-4 p-2">
+                    <input type="submit" value="Search" class="btn btn-secondary" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@{
+    int previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    int maxPage = (int)Math.Ceiling((double)Model.TotalEmployees /
+        Model.EmployeesPerPage);
+}
+
+<div class="row mb-5">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-secondary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="Employee"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-department="@Model.Department"
+           asp-route-position="@Model.Position"
+           asp-route-searchTerm="@Model.SearchString"
+           asp-route-sorting="@((int)Model.EmployeeSorting)"><<</a>
+    </div>
+
+    @{
+        bool shouldNextPageBeDisabled = Model.CurrentPage == maxPage ||
+        !Model.Employees.Any();
+    }
+
+    <div class="col-md-5 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-secondary
+           @(shouldNextPageBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="Employee"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-department="@Model.Department"
+           asp-route-position="@Model.Position"
+           asp-route-searchTerm="@Model.SearchString"
+           asp-route-sorting="@((int)Model.EmployeeSorting)">>></a>
+    </div>
+</div>
+
+@if (!Model.Employees.Any())
 {
     <h2>There are no registered Employees.</h2>
 }
@@ -22,29 +122,9 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Model)
+            @foreach (var employee in Model.Employees)
             {
-                <tr>
-                    <td><p>@user.Id</p></td>
-                    <td><p>@user.FirstName @user.LastName</p></td>
-                    <td><p>@user.HireDate.ToShortDateString()</p></td>
-                    <td><p>@user.Position</p></td>
-                    <td><p>@user.Department</p></td>
-                    <td>
-                        @if (user.IsHired)
-                        {
-                            <label>✔</label>
-                            <a asp-controller="Employee" asp-action="Hire" asp-route-id="@user.Id" method="post" class="btn btn-secondary">Fired</a>
-                        }
-                        else
-                        {
-                            <label class="text-center">❌</label>
-                            <a asp-controller="Employee" asp-action="Hire" asp-route-id="@user.Id" method="post" class="btn btn-secondary">Hired</a>
-                        }
-                    </td>
-                    <td><a asp-controller="Employee" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-secondary">Edit</a></td>
-                    <td><a asp-controller="Employee" asp-action="Delete" asp-route-id="@user.Id" class="btn btn-secondary" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</a></td>
-                </tr>
+                <partial name="_EmployeePartial" model="@employee" />
             }
         </tbody>
     </table>

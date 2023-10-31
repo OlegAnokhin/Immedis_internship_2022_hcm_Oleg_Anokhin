@@ -2,11 +2,11 @@
 {
     using Microsoft.EntityFrameworkCore;
 
-    using Data;
-    using Data.Models;
     using Interfaces;
     using ViewModels.PreviousPositions;
     using System.Data;
+    using HumanCapitalManagementApp.Data;
+    using HumanCapitalManagementApp.Data.Models;
 
     public class PreviousPositionService : IPreviousPositionService
     {

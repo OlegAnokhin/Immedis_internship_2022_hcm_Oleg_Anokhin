@@ -1,10 +1,12 @@
 ﻿namespace HumanCapitalManagementApp.Services.Interfaces
 {
+    using Data.Models;
     using ViewModels.Employee;
 
     public interface IEmployeeService
     {
-        Task<IEnumerable<AllEmployeesViewModel>> ListAllEmployeesAsync();
+        //Task<IEnumerable<AllEmployeesViewModel>> ListAllEmployeesAsync();
+        Task<AllEmployeesFilteredAndPagedServiceModel> AllAsync(AllEmployeesQueryModel model);
 
         Task<SuccessLoginViewModel> TakeEmployeeByIdAsync(int employeeId);
 

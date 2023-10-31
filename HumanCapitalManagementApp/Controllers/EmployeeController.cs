@@ -1,4 +1,6 @@
-﻿namespace HumanCapitalManagementApp.Controllers
+﻿using HumanCapitalManagementApp.Services.Data.Models;
+
+namespace HumanCapitalManagementApp.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
@@ -21,22 +23,37 @@
             this.departmentService = departmentService;
         }
 
+        //[AllowAnonymous]
+        //public async Task<IActionResult> All()
+        //{
+
+        //    try
+        //    {
+        //        IEnumerable<AllEmployeesViewModel> allEmployees =
+        //            await this.employeeService.ListAllEmployeesAsync();
+
+        //        return View(allEmployees);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        TempData["ErrorMessage"] = "An unexpected error occurred";
+        //        return RedirectToAction("Error", "Home");
+        //    }
+        //}
+
+        [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
         {
+            AllEmployeesFilteredAndPagedServiceModel serviceModel =
+                await this.employeeService.AllAsync(queryModel);
 
-            try
-            {
-                IEnumerable<AllEmployeesViewModel> allEmployees =
-                    await this.employeeService.ListAllEmployeesAsync();
+            queryModel.Employees = serviceModel.Employees;
+            queryModel.TotalEmployees = serviceModel.TotalEmployeesCount;
+            queryModel.Departments = await this.departmentService.AllDepartmentNamesAsync();
+            queryModel.Positions = await this.positionService.AllPositionNamesAsync();
 
-                return View(allEmployees);
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "An unexpected error occurred";
-                return RedirectToAction("Error", "Home");
-            }
+            return this.View(queryModel);
         }
 
         [AllowAnonymous]

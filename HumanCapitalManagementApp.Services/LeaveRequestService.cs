@@ -2,10 +2,10 @@
 {
     using Microsoft.EntityFrameworkCore;
 
-    using Data;
-    using Data.Models;
     using Interfaces;
     using ViewModels.LeaveRequest;
+    using HumanCapitalManagementApp.Data.Models;
+    using HumanCapitalManagementApp.Data;
 
     public class LeaveRequestService : ILeaveRequestService
     {

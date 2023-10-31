@@ -2,9 +2,9 @@
 {
     using Microsoft.EntityFrameworkCore;
 
-    using Data;
     using Interfaces;
     using ViewModels.Employee;
+    using HumanCapitalManagementApp.Data;
 
     public class DepartmentService : IDepartmentService
     {

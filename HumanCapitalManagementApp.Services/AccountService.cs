@@ -4,11 +4,10 @@
     using System.Data;
     using BCrypt.Net;
 
-    using Data;
-    using Data.Models;
     using Interfaces;
     using Models.Account;
-
+    using HumanCapitalManagementApp.Data;
+    using HumanCapitalManagementApp.Data.Models;
 
     public class AccountService : IAccountService
     {

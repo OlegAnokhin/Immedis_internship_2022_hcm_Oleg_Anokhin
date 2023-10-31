@@ -1,13 +1,15 @@
-﻿namespace HumanCapitalManagementApp.Services
-{
+﻿using HumanCapitalManagementApp.ViewModels.Employee.Enums;
 
+namespace HumanCapitalManagementApp.Services
+{
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
 
-    using Data;
     using Data.Models;
     using Interfaces;
     using ViewModels.Employee;
+    using HumanCapitalManagementApp.Data;
+    using HumanCapitalManagementApp.Data.Models;
 
     public class EmployeeService : IEmployeeService
     {
@@ -18,11 +20,61 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<AllEmployeesViewModel>> ListAllEmployeesAsync()
+        //public async Task<IEnumerable<AllEmployeesViewModel>> ListAllEmployeesAsync()
+        //{
+        //    IEnumerable<AllEmployeesViewModel> allEmployees = await dbContext
+        //        .Employees
+        //        .Select(e => new AllEmployeesViewModel()
+        //        {
+        //            Id = e.Id,
+        //            FirstName = e.FirstName,
+        //            LastName = e.LastName,
+        //            IsHired = e.IsHired,
+        //            HireDate = e.HireDate,
+        //            Position = e.Position.Name,
+        //            Department = e.Department.Name
+        //        })
+        //        .ToListAsync();
+        //    return allEmployees;
+        //}
+
+        public async Task<AllEmployeesFilteredAndPagedServiceModel> AllAsync(AllEmployeesQueryModel model)
         {
-            IEnumerable<AllEmployeesViewModel> allEmployees = await dbContext
-                .Employees
-                .Select(e => new AllEmployeesViewModel()
+            IQueryable<Employee> employeeQuery = this.dbContext.Employees;
+
+            if (!string.IsNullOrWhiteSpace(model.Department))
+            {
+                employeeQuery = employeeQuery
+                    .Where(e => e.Department.Name == model.Department);
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Position))
+            {
+                employeeQuery = employeeQuery
+                    .Where(e => e.Position.Name == model.Position);
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.SearchString))
+            {
+                string wildCard = $"%{model.SearchString.ToLower()}%";
+                employeeQuery = employeeQuery
+                    .Where(e => EF.Functions.Like(e.FirstName, wildCard));
+            }
+
+            employeeQuery = model.EmployeeSorting switch
+            {
+                EmployeeSorting.Newest => employeeQuery
+                    .OrderByDescending(e => e.HireDate),
+                EmployeeSorting.Oldest => employeeQuery
+                    .OrderBy(e => e.HireDate),
+                _ => employeeQuery
+                    .OrderBy(e => e.Id)
+            };
+
+            IEnumerable<AllEmployeesViewModel> allEmployees = await employeeQuery
+                .Skip((model.CurrentPage - 1) * model.EmployeesPerPage)
+                .Take(model.EmployeesPerPage)
+                .Select(e => new AllEmployeesViewModel
                 {
                     Id = e.Id,
                     FirstName = e.FirstName,
@@ -32,8 +84,12 @@
                     Position = e.Position.Name,
                     Department = e.Department.Name
                 })
-                .ToListAsync();
-            return allEmployees;
+                .ToArrayAsync();
+            return new AllEmployeesFilteredAndPagedServiceModel()
+            {
+                TotalEmployeesCount = employeeQuery.Count(),
+                Employees = allEmployees
+            };
         }
 
         public async Task<SuccessLoginViewModel> TakeEmployeeByIdAsync(int employeeId)
