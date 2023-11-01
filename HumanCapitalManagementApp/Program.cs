@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-
 namespace HumanCapitalManagementApp
 {
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.IdentityModel.Tokens;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
 
     using Data;
     using Services.Interfaces;
@@ -32,11 +31,16 @@ namespace HumanCapitalManagementApp
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        ValidAudience = builder.Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                        ValidIssuer = "https://localhost:7242/",
+                        ValidAudience = "https://localhost:7242/",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"))
+                        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        //ValidAudience = builder.Configuration["Jwt:Audience"],
+                        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
                 });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddDbContext<HumanCapitalManagementAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
@@ -73,6 +77,8 @@ namespace HumanCapitalManagementApp
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

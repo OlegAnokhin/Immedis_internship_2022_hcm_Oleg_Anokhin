@@ -2,9 +2,11 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    
+
     using Models.Account;
     using Services.Interfaces;
+    using System.Net.Http.Headers;
+    using System.Net;
 
     public class AccountController : BaseController
     {
@@ -76,20 +78,42 @@
 
             try
             {
-                if (await accountService.LoginEmployeeAsync(model) == false)
+                var token = await accountService.LoginEmployeeAsync(model);
+
+                if (token != null)
                 {
-                    throw new Exception("Invalid username or password");
+                    var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
+
+                    //HttpClient client = new HttpClient();
+                    //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    //client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+                    //var get = client.GetAsync($"https://localhost:7242").Result;
+
+                    //switch (get.StatusCode)
+                    //{
+                    //    case HttpStatusCode.Unauthorized:
+                    //        return RedirectToAction("Error401", "Home");
+                    //    case HttpStatusCode.OK:
+                    //        return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
+                    //    default:
+                    //        return RedirectToAction("Login", "Account");
+                    //}
+
+                    HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions
+                    {
+                        Expires = DateTime.Now.AddDays(1)
+                    });
+
+                    HttpContext.Request.Headers.Add("Authorization", $"Bearer {token}");
+                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
                 }
-
-                var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
-
-                return RedirectToAction("SuccessLogin", "Employee", new {EmployeeId = employeeId });
             }
             catch (Exception)
             {
                 TempData["ErrorMessage"] = "Invalid username or password";
                 return RedirectToAction("Login", "Account");
             }
+            return RedirectToAction("Login", "Account");
         }
 
         [AllowAnonymous]

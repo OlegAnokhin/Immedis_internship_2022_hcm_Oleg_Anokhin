@@ -6,7 +6,7 @@
     {
         Task RegisterEmployeeAsync(RegisterFormModel model);
 
-        Task<bool> LoginEmployeeAsync(LoginFormModel model);
+        Task<string> LoginEmployeeAsync(LoginFormModel model);
 
         Task<int> TakeIdByUsernameAsync(string username);
 

@@ -1,13 +1,18 @@
 ﻿namespace HumanCapitalManagementApp.Services
 {
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
-    using System.Data;
     using BCrypt.Net;
+    using System.Data;
+    using System.Text;
+    using System.Security.Claims;
+    using System.IdentityModel.Tokens.Jwt;
 
     using Interfaces;
     using Models.Account;
     using HumanCapitalManagementApp.Data;
     using HumanCapitalManagementApp.Data.Models;
+    using Microsoft.IdentityModel.Tokens;
 
     public class AccountService : IAccountService
     {
@@ -58,7 +63,6 @@
             {
                 await dbContext.Employees.AddAsync(employee);
                 await dbContext.SaveChangesAsync();
-
             }
             catch (Exception)
             {
@@ -66,15 +70,17 @@
             }
         }
 
-        public async Task<bool> LoginEmployeeAsync(LoginFormModel model)
+        public async Task<string> LoginEmployeeAsync(LoginFormModel model)
         {
             var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
             
             if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
             {
-                return true;
+                var token = GenerateJwtToken(model.UserName);
+
+                return token;
             }
-            return false;
+            return null;
         }
 
         public async Task<int> TakeIdByUsernameAsync(string username)
@@ -86,6 +92,27 @@
                 return 0;
             }
             return employee.Id;
+        }
+
+        private string GenerateJwtToken(string username)
+        {
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"));
+
+            var token = new JwtSecurityToken(
+                issuer: "https://localhost:7242/",
+                audience: "https://localhost:7242/",
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(60),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private bool VerifyPassword(string inputPassword, string hashedPassword)
