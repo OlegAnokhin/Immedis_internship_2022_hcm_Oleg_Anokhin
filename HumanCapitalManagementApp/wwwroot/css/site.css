@@ -1,3 +1,9 @@
+.backgroundImage {
+    background-image: url("https://img.freepik.com/free-vector/background-gradient-minimalist-design-modern_483537-2860.jpg?w=1380&t=st=1698916563~exp=1698917163~hmac=a5ab7454ca58c371fb58c35cfdfae479b241373d0648b9e7ed393779e789197b");
+    background-size: cover;
+    background-attachment: fixed
+}
+
 html {
   font-size: 14px;
 }
