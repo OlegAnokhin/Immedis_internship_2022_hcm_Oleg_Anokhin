@@ -122,10 +122,11 @@
             return RedirectToAction("Login", "Account");
         }
 
-        [AllowAnonymous]
         public IActionResult Logout()
         {
-            return View();
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
