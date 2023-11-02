@@ -1,0 +1,22 @@
+﻿@model LeaveRequestViewModel
+<tr>
+    <td><p>@Model.LeaveRequestId</p></td>
+    <td><p>@Model.EmployeeId</p></td>
+    <td><p>@Model.From.ToShortDateString()</p></td>
+    <td><p>@Model.To.ToShortDateString()</p></td>
+    <td><p>@Model.Description</p></td>
+    <td><p>@Model.VacationOrSickLeave</p></td>
+    <td>
+        @if (Model.Approved)
+        {
+            <label>✔</label>
+            <a asp-controller="LeaveRequest" asp-action="Approve" asp-route-id="@Model.LeaveRequestId" method="post" class="btn btn-secondary">Rejected</a>
+        }
+        else
+        {
+            <label class="text-center">❌</label>
+            <a asp-controller="LeaveRequest" asp-action="Approve" asp-route-id="@Model.LeaveRequestId" method="post" class="btn btn-secondary">Approved</a>
+        }
+    </td>
+    <td><a asp-controller="LeaveRequest" asp-action="Delete" asp-route-id="@Model.LeaveRequestId" class="btn btn-secondary" onclick="return confirm('Are you sure you want to delete this request?')">Delete</a></td>
+</tr>
