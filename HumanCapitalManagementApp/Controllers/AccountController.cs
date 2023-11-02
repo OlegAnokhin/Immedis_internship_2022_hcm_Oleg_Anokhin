@@ -1,4 +1,8 @@
-﻿namespace HumanCapitalManagementApp.Controllers
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+namespace HumanCapitalManagementApp.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
@@ -83,6 +87,9 @@
                 if (token != null)
                 {
                     var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
+
+                    //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    //    new ClaimsPrincipal(responce.Data));
 
                     HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions
                     {
