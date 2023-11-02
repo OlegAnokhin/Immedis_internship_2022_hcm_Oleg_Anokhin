@@ -7,7 +7,7 @@
     using ViewModels.Employee;
     using HumanCapitalManagementApp.Services.Data.Models;
 
-    public class EmployeeController : BaseController
+    public class EmployeeController : Controller
     {
         private readonly IEmployeeService employeeService;
         private readonly IPositionService positionService;
@@ -23,7 +23,7 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
         {
             AllEmployeesFilteredAndPagedServiceModel serviceModel =
@@ -50,6 +50,7 @@
         }
 
         [HttpGet]
+        //[Authorize(Roles = "Employee")]
         [AllowAnonymous]
         public async Task<IActionResult> AboutMe(int id)
         {

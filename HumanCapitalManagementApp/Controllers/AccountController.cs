@@ -84,21 +84,6 @@
                 {
                     var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
 
-                    //HttpClient client = new HttpClient();
-                    //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    //client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-                    //var get = client.GetAsync($"https://localhost:7242").Result;
-
-                    //switch (get.StatusCode)
-                    //{
-                    //    case HttpStatusCode.Unauthorized:
-                    //        return RedirectToAction("Error401", "Home");
-                    //    case HttpStatusCode.OK:
-                    //        return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
-                    //    default:
-                    //        return RedirectToAction("Login", "Account");
-                    //}
-
                     HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions
                     {
                         Expires = DateTime.Now.AddDays(1)

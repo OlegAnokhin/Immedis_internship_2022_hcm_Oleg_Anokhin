@@ -99,14 +99,15 @@
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role,"Employee")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"));
 
             var token = new JwtSecurityToken(
-                issuer: "https://localhost:7242/",
-                audience: "https://localhost:7242/",
+                issuer: "https://localhost:7242",
+                audience: "https://localhost:7242",
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
