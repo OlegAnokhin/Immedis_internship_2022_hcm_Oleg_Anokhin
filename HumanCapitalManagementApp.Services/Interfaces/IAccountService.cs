@@ -10,5 +10,7 @@
 
         Task<int> TakeIdByUsernameAsync(string username);
 
+        Task<bool> ExistByUsername(string username);
+
     }
 }

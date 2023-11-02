@@ -52,6 +52,13 @@ namespace HumanCapitalManagementApp.Controllers
                 return View(model);
             }
 
+            var empExist = await this.accountService.ExistByUsername(model.UserName);
+
+            if (empExist)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             try
             {
                 await accountService.RegisterEmployeeAsync(model);

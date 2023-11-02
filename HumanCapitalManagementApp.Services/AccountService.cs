@@ -23,6 +23,16 @@
             this.dbContext = dbContext;
         }
 
+        public async Task<bool> ExistByUsername(string username)
+        {
+            var employee = await dbContext.Employees.FirstOrDefaultAsync(e => e.UserName == username);
+            if (employee == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task RegisterEmployeeAsync(RegisterFormModel model)
         {
             string salt = BCrypt.GenerateSalt(12);
