@@ -1,6 +1,5 @@
 ﻿namespace HumanCapitalManagementApp.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using Services.Interfaces;
@@ -22,7 +21,6 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> PreviousPositions(int id)
         {
             IEnumerable<AllPreviousPositionsViewModel> info =
@@ -32,7 +30,6 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Add()
         {
             AddPreviousPositionsFormModel model = new AddPreviousPositionsFormModel()
@@ -46,7 +43,6 @@
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Add(int id, AddPreviousPositionsFormModel model)
         {
             if (!ModelState.IsValid)
@@ -71,7 +67,6 @@
             }
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Delete(int id)
         {
             bool positionExist = await this.previousPositionService

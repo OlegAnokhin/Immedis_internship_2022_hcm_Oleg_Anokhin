@@ -1,6 +1,5 @@
 ﻿namespace HumanCapitalManagementApp.Services
 {
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
     using System.Data;
@@ -80,15 +79,17 @@
             }
         }
 
-        public async Task<string> LoginEmployeeAsync(LoginFormModel model)
+        public async Task<ClaimsIdentity> LoginEmployeeAsync(LoginFormModel model)
         {
             var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
-            
+
             if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
             {
+                var result = Authenticate(employee);
+
                 var token = GenerateJwtToken(model.UserName);
 
-                return token;
+                return result;
             }
             return null;
         }
@@ -102,6 +103,36 @@
                 return 0;
             }
             return employee.Id;
+        }
+
+        private ClaimsIdentity Authenticate(Employee employee)
+        {
+            var claims = new List<Claim>();
+
+            if (employee.UserName == "admin")
+            {
+                claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "Administrator")
+                };
+
+                return new ClaimsIdentity(claims, "ApplicationCookie",
+                    ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType);
+            }
+            else
+            {
+                claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, "Employee")
+            };
+
+                return new ClaimsIdentity(claims, "ApplicationCookie",
+                           ClaimsIdentity.DefaultNameClaimType,
+                           ClaimsIdentity.DefaultRoleClaimType);
+            }
         }
 
         private string GenerateJwtToken(string username)

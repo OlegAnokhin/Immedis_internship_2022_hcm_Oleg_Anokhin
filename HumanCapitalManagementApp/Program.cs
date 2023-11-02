@@ -1,11 +1,8 @@
 namespace HumanCapitalManagementApp
 {
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.IdentityModel.Tokens;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using System.Security.Claims;
-    using System.Text;
-
+    
     using Data;
     using Services.Interfaces;
     using Web.Infrastructure;
@@ -22,27 +19,37 @@ namespace HumanCapitalManagementApp
             builder.Services.AddDbContext<HumanCapitalManagementAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            //builder.Services.AddAuthentication(options =>
+            //    {
+            //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    })
+            //    .AddJwtBearer(options =>
+            //    {
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
+            //            ValidateLifetime = true,
+            //            ValidateIssuerSigningKey = true,
+            //            ValidIssuer = "https://localhost:7242",
+            //            ValidAudience = "https://localhost:7242",
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)")),
+            //            RoleClaimType = ClaimTypes.Role
+            //            //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            //            //ValidAudience = builder.Configuration["Jwt:Audience"],
+            //            //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            //        };
+            //    });
             builder.Services.AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(options =>
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = "https://localhost:7242",
-                        ValidAudience = "https://localhost:7242",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)")),
-                        RoleClaimType = ClaimTypes.Role
-                        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        //ValidAudience = builder.Configuration["Jwt:Audience"],
-                        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                    };
+                    // Настройки за куки аутентикацията (ако са нужни)
                 });
 
             builder.Services.AddAuthorization();
@@ -57,11 +64,6 @@ namespace HumanCapitalManagementApp
 
             builder.Services.AddApplicationServices(typeof(IAccountService));
 
-            //builder.Services.AddSession(options =>
-            //{
-            //    options.IdleTimeout = TimeSpan.FromMinutes(30);
-            //});
-            
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDistributedMemoryCache();
@@ -70,8 +72,6 @@ namespace HumanCapitalManagementApp
 
 
             WebApplication app = builder.Build();
-
-            //app.UseSession();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

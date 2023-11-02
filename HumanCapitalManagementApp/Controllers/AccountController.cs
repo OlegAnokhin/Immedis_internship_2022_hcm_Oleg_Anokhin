@@ -1,16 +1,13 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-
-namespace HumanCapitalManagementApp.Controllers
+﻿namespace HumanCapitalManagementApp.Controllers
 {
+    using System.Security.Claims;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
 
     using Models.Account;
     using Services.Interfaces;
-    using System.Net.Http.Headers;
-    using System.Net;
 
     public class AccountController : BaseController
     {
@@ -89,23 +86,33 @@ namespace HumanCapitalManagementApp.Controllers
 
             try
             {
-                var token = await accountService.LoginEmployeeAsync(model);
+                var responce = await this.accountService.LoginEmployeeAsync(model);
 
-                if (token != null)
+                if (responce != null)
                 {
-                    var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
-
-                    //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    //    new ClaimsPrincipal(responce.Data));
-
-                    HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions
-                    {
-                        Expires = DateTime.Now.AddDays(1)
-                    });
-
-                    HttpContext.Request.Headers.Add("Authorization", $"Bearer {token}");
-                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(responce));
                 }
+
+                //var token = await accountService.LoginEmployeeAsync(model);
+
+                //if (token != null)
+                //{
+                //    var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
+
+                //    //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                //    //    new ClaimsPrincipal(responce.Data));
+
+                //    HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions
+                //    {
+                //        Expires = DateTime.Now.AddDays(1)
+                //    });
+
+                //    HttpContext.Request.Headers.Add("Authorization", $"Bearer {token}");
+                //    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
+                //}
+                var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
+                return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
             }
             catch (Exception)
             {

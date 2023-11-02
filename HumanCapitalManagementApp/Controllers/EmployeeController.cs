@@ -7,7 +7,7 @@
     using ViewModels.Employee;
     using HumanCapitalManagementApp.Services.Data.Models;
 
-    public class EmployeeController : Controller
+    public class EmployeeController : BaseController
     {
         private readonly IEmployeeService employeeService;
         private readonly IPositionService positionService;
@@ -23,7 +23,7 @@
         }
 
         [HttpGet]
-        //[AllowAnonymous]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
         {
             AllEmployeesFilteredAndPagedServiceModel serviceModel =
@@ -37,7 +37,6 @@
             return this.View(queryModel);
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> SuccessLogin(int employeeId)
         {
             if (employeeId == 0)
@@ -50,8 +49,6 @@
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Employee")]
-        [AllowAnonymous]
         public async Task<IActionResult> AboutMe(int id)
         {
             var info = await this.employeeService.TakeEmployeeInfoByIdAsync(id);
@@ -60,7 +57,6 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Edit(int id)
         {
             bool employeeExist = await this.employeeService
@@ -81,7 +77,6 @@
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Edit(int id, EditEmployeeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -112,7 +107,6 @@
             }
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Hire(int id)
         {
             bool employeeExist = await this.employeeService
@@ -143,7 +137,6 @@
             return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Delete(int id)
         {
             bool existById = await this.employeeService
@@ -176,7 +169,6 @@
 
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult QualificationTraining()
         {
             return View();

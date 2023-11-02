@@ -1,7 +1,6 @@
 ﻿namespace HumanCapitalManagementApp.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
 
     using Services.Interfaces;
     using ViewModels.LeaveRequest;
@@ -17,7 +16,6 @@
             this.employeeService = employeeService;
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> All(int id)
         {
             try
@@ -34,7 +32,6 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Add()
         {
             LeaveRequestViewModel model = new LeaveRequestViewModel()
@@ -46,7 +43,6 @@
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Add(int id, LeaveRequestViewModel model)
         {
             if (!ModelState.IsValid)
@@ -74,7 +70,6 @@
                 TempData["ErrorMessage"] = "An unexpected error occurred";
                 return RedirectToAction("Error", "Home");
             }
-            return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
         }
     }
 }
