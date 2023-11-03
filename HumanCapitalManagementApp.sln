@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.Web.Infrastructure", "HumanCapitalManagementApp.Web.Infrastructure\HumanCapitalManagementApp.Web.Infrastructure.csproj", "{5F4A712B-A547-4250-8772-FDE3B4F9DC9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementApp.Services.Data.Models", "HumanCapitalManagementApp.Services.Data.Models\HumanCapitalManagementApp.Services.Data.Models.csproj", "{905EC1ED-BB7F-4968-9FA3-FFB52E5F330F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanCapitalManagementApp.Services.Data.Models", "HumanCapitalManagementApp.Services.Data.Models\HumanCapitalManagementApp.Services.Data.Models.csproj", "{905EC1ED-BB7F-4968-9FA3-FFB52E5F330F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{F39696A5-91F1-4F50-9C91-0EA8915F1FC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanCapitalManagementAPI", "HumanCapitalManagementAPI\HumanCapitalManagementAPI.csproj", "{C0A10A13-9DA3-45AE-90A5-3B59B37832D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,9 +61,16 @@ Global
 		{905EC1ED-BB7F-4968-9FA3-FFB52E5F330F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{905EC1ED-BB7F-4968-9FA3-FFB52E5F330F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{905EC1ED-BB7F-4968-9FA3-FFB52E5F330F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0A10A13-9DA3-45AE-90A5-3B59B37832D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0A10A13-9DA3-45AE-90A5-3B59B37832D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0A10A13-9DA3-45AE-90A5-3B59B37832D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0A10A13-9DA3-45AE-90A5-3B59B37832D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C0A10A13-9DA3-45AE-90A5-3B59B37832D7} = {F39696A5-91F1-4F50-9C91-0EA8915F1FC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F766AB7-513A-4EF2-BFA8-DF0185129658}
