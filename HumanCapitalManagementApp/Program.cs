@@ -14,11 +14,15 @@ namespace HumanCapitalManagementApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<HumanCapitalManagementAppDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            //עמגא סו ןנטלוסעט ג ÀÏÈ
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+            //builder.Services.AddDbContext<HumanCapitalManagementAppDbContext>(options =>
+            //    options.UseSqlServer(connectionString));
+
+
+            //עמגא םו נאבמעט
             //builder.Services.AddAuthentication(options =>
             //    {
             //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -53,6 +57,8 @@ namespace HumanCapitalManagementApp
                 });
 
             builder.Services.AddAuthorization();
+
+            //עמגא םו נאבמעט
             //builder.Services.AddAuthorization(options =>
             //{
             //    options.AddPolicy("UserCredentials", policy =>
@@ -81,8 +87,9 @@ namespace HumanCapitalManagementApp
                 app.UseHsts();
             }
 
-            var scope = app.Services.CreateScope();
-            scope.ServiceProvider.GetService<HumanCapitalManagementAppDbContext>()?.Database.EnsureCreated();
+            //עמגא סו ןנולוסעט ג ÀÏÈ 
+            //var scope = app.Services.CreateScope();
+            //scope.ServiceProvider.GetService<HumanCapitalManagementAppDbContext>()?.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
 
