@@ -1,11 +1,6 @@
 namespace HumanCapitalManagementApp
 {
     using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.EntityFrameworkCore;
-    
-    using Data;
-    using Services.Interfaces;
-    using Web.Infrastructure;
 
     public class Program
     {
@@ -68,7 +63,7 @@ namespace HumanCapitalManagementApp
             //    });
             //});
 
-            builder.Services.AddApplicationServices(typeof(IAccountService));
+            //builder.Services.AddApplicationServices(typeof(IAccountService));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -100,15 +95,16 @@ namespace HumanCapitalManagementApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(config =>
-            {
-                config.MapControllerRoute(
-                    name: "areas",
-                    pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
+            app.MapDefaultControllerRoute();
+            //app.UseEndpoints(config =>
+            //{
+            //    config.MapControllerRoute(
+            //        name: "areas",
+            //        pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}"
+            //    );
 
-                config.MapDefaultControllerRoute();
-            });
+            //    config.MapDefaultControllerRoute();
+            //});
 
             app.Run();
         }

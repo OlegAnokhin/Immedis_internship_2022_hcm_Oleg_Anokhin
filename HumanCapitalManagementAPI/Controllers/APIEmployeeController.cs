@@ -4,7 +4,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : ControllerBase
+    public class APIEmployeeController : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetAll()
