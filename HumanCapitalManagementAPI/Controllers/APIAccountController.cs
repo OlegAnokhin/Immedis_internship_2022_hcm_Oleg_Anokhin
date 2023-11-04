@@ -86,7 +86,7 @@
                 await accountService.LoginEmployeeAsync(model);
                 var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
 
-                return Ok("Login success");
+                return Ok(new { employeeId = employeeId});
             }
             catch (Exception ex)
             {

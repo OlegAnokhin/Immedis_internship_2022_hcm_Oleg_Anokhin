@@ -137,11 +137,15 @@
 
         private string GenerateJwtToken(string username)
         {
+            //var employee = dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == username);
+            //var id = employee.Id.ToString();
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
+                //new Claim(JwtRegisteredClaimNames.NameId, id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role,"Employee")
+                //new Claim(ClaimTypes.Role,"Employee")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"));

@@ -128,7 +128,13 @@
 
                 if (response.IsSuccessStatusCode)
                 {
-                    //response.Content
+                    var responseData = await response.Content.ReadFromJsonAsync<dynamic>();
+                    //var dsd = responseData[2];
+
+
+                    //var id = responseData;
+                    //var sdfs =id[1];
+
                     return RedirectToAction("Login", "Account");
                 }
                 if (response.StatusCode == HttpStatusCode.Conflict)
