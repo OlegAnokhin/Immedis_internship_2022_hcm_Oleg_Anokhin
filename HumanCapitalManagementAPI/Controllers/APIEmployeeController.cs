@@ -122,5 +122,28 @@ namespace HumanCapitalManagementAPI.Controllers
             }
         }
 
+        [HttpGet]
+        //[Authorize]
+        [Route("Delete/{employeeId}")]
+        public async Task<IActionResult> Delete(int employeeId)
+        {
+            bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
+
+            if (!employeeExist)
+            {
+                return NotFound("Invalid identifier");
+            }
+            try
+            {
+                await this.employeeService.SoftDeleteEmployeeByIdAsync(employeeId);
+
+                return Ok("Success");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+
     }
 }

@@ -140,35 +140,30 @@
         //    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
         //}
 
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    bool existById = await this.employeeService
-        //        .ExistByIdAsync(id);
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIEmployee/Delete/{id}");
 
-        //    if (!existById)
-        //    {
-        //        TempData["ErrorMessage"] = "Record whit this Id not exist.";
-        //        return RedirectToAction("Error", "Home");
-        //    }
+                if (response.IsSuccessStatusCode)
+                {
+                    string returnUrl = Request.Headers["Referer"].ToString();
 
-        //    try
-        //    {
-        //        await this.employeeService.SoftDeleteEmployeeByIdAsync(id);
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
 
-        //        string returnUrl = Request.Headers["Referer"].ToString();
-
-        //        if (!string.IsNullOrEmpty(returnUrl))
-        //        {
-        //            return Redirect(returnUrl);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        TempData["ErrorMessage"] = "An unexpected error occurred";
-        //        return RedirectToAction("Error", "Home");
-        //    }
-        //    return RedirectToAction("Index", "Home");
-        //}
+            return RedirectToAction("Error", "Home");
+        }
 
 
         [HttpGet]
