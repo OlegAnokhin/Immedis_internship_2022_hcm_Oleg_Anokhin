@@ -16,18 +16,10 @@
         private Uri baseAddress = new Uri("http://localhost:5152");
         HttpClient client;
 
-        //private readonly IAccountService accountService;
-        //private readonly IPositionService positionService;
-        //private readonly IDepartmentService departmentService;
-
-        public AccountController(/*IAccountService accountService, IPositionService positionService, IDepartmentService departmentService*/)
+        public AccountController()
         {
             this.client = new HttpClient();
             this.client.BaseAddress = baseAddress;
-
-            //this.accountService = accountService;
-            //this.positionService = positionService;
-            //this.departmentService = departmentService;
         }
 
         [HttpGet]
@@ -45,16 +37,6 @@
             }
 
             return StatusCode((int)response.StatusCode, response.ReasonPhrase);
-
-            //RegisterFormModel model = new RegisterFormModel()
-            // {
-            //това го прави АПИ
-            //HireDate = DateTime.Today,
-            //Positions = await this.positionService.AllPositionsAsync(),
-            //Departments = await this.departmentService.AllDepartmentsAsync()
-            //};
-
-            //return View(model);
         }
 
         [HttpPost]
@@ -80,29 +62,6 @@
                     ModelState.AddModelError(string.Empty, errorMessage); ;
                     return View(model);
                 }
-                //това го прави АПИ
-                //if (!ModelState.IsValid)
-                //{
-                //    model.HireDate = DateTime.Today;
-                //    model.Positions = await this.positionService.AllPositionsAsync();
-                //    model.Departments = await this.departmentService.AllDepartmentsAsync();
-
-                //    return View(model);
-                //}
-
-                //var empExist = await this.accountService.ExistByUsername(model.UserName);
-
-                //if (empExist)
-                //{
-                //    return RedirectToAction("Login", "Account");
-                //}
-
-                //serelezirane na model
-                //izpra]ane kym api
-
-                //това го прави АПИ
-                //await accountService.RegisterEmployeeAsync(model);
-
                 return RedirectToAction("Register", "Account");
             }
             catch (Exception)
@@ -146,39 +105,6 @@
                     ModelState.AddModelError(string.Empty, errorMessage); ;
                     return View(model);
                 }
-
-
-                //това го прави АПИ
-                //var responce = await this.accountService.LoginEmployeeAsync(model);
-
-                //if (responce != null)
-                //{
-                //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                //        new ClaimsPrincipal(responce));
-                //}
-
-                //това е старо
-                //var token = await accountService.LoginEmployeeAsync(model);
-
-                //if (token != null)
-                //{
-                //    var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
-
-                //    //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                //    //    new ClaimsPrincipal(responce.Data));
-
-                //    HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions
-                //    {
-                //        Expires = DateTime.Now.AddDays(1)
-                //    });
-
-                //    HttpContext.Request.Headers.Add("Authorization", $"Bearer {token}");
-                //    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
-                //}
-
-                //това го прави АПИ
-                //var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
-                //return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
             }
             catch (Exception)
             {

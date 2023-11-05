@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+    using System.Net;
 
     using ViewModels.Employee;
 
@@ -47,74 +48,67 @@
             }
 
             return RedirectToAction("Error", "Home");
-
-            //if (employeeId == 0)
-            //{
-            //    return RedirectToAction("Error401", "Home");
-            //}
-            //var employeeModel = await this.employeeService.TakeEmployeeByIdAsync(employeeId);
-
-            //return View(employeeModel);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> AboutMe(int id)
-        //{
-        //    var info = await this.employeeService.TakeEmployeeInfoByIdAsync(id);
+        [HttpGet]
+        public async Task<IActionResult> AboutMe(int id)
+        {
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIEmployee/AboutMe/{id}");
 
-        //    return View(info);
-        //}
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<EmployeeInfoModel>(json);
 
-        //[HttpGet]
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    bool employeeExist = await this.employeeService
-        //        .ExistByIdAsync(id);
+                return View("AboutMe", model);
+            }
 
-        //    if (!employeeExist)
-        //    {
-        //        TempData["ErrorMessage"] = "Record whit this Id not exist.";
-        //        return RedirectToAction("Error", "Home");
-        //    }
+            return RedirectToAction("Error", "Home");
+        }
 
-        //    EditEmployeeViewModel model = await this.employeeService
-        //        .TakeEmployeeForEditByIdAsync(id);
-        //    model.Positions = await this.positionService.AllPositionsAsync();
-        //    model.Departments = await this.departmentService.AllDepartmentsAsync();
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIEmployee/Edit/{id}");
 
-        //    return View(model);
-        //}
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<EditEmployeeViewModel>(json);
 
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(int id, EditEmployeeViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        model.Positions = await this.positionService.AllPositionsAsync();
-        //        model.Departments = await this.departmentService.AllDepartmentsAsync();
-        //        return View(model);
-        //    }
+                return View("Edit", model);
+            }
 
-        //    bool employeeExist = await this.employeeService
-        //        .ExistByIdAsync(id);
+            return RedirectToAction("Error", "Home");
+        }
 
-        //    if (!employeeExist)
-        //    {
-        //        TempData["ErrorMessage"] = "Record whit this Id not exist.";
-        //        return RedirectToAction("Error", "Home");
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditEmployeeViewModel model)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync(client.BaseAddress + $"APIEmployee/Edit/{id}", model);
 
-        //    try
-        //    {
-        //        await this.employeeService.EditEmployeeByIdAsync(id, model);
-        //        return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
-        //    }
-        //    catch (Exception)
-        //    {
-        //        TempData["ErrorMessage"] = "An unexpected error occurred";
-        //        return RedirectToAction("Error", "Home");
-        //    }
-        //}
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+                }
+                
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    return View(model);
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
 
         //public async Task<IActionResult> Hire(int id)
         //{
