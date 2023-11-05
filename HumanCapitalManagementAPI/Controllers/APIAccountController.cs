@@ -86,18 +86,12 @@
                 await accountService.LoginEmployeeAsync(model);
                 var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
 
-                return Ok(new { employeeId = employeeId});
+                return Ok(new { id = employeeId});
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Error: " + ex.Message);
             }
-        }
-
-        // DELETE api/<AccountController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

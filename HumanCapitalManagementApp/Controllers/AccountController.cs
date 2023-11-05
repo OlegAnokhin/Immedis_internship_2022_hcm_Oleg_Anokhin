@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json.Linq;
     using Newtonsoft.Json;
 
     using System.Net;
@@ -128,12 +129,9 @@
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseData = await response.Content.ReadFromJsonAsync<dynamic>();
-                    //var dsd = responseData[2];
-
-
-                    //var id = responseData;
-                    //var sdfs =id[1];
+                    string json = await response.Content.ReadAsStringAsync();
+                    dynamic responseData = JObject.Parse(json);
+                    int id = responseData.id;
 
                     return RedirectToAction("Login", "Account");
                 }
