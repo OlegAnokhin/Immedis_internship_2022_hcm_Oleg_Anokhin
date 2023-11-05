@@ -83,10 +83,10 @@
                     return BadRequest(ModelState);
                 }
 
-                await accountService.LoginEmployeeAsync(model);
+                var (identity, token) = await accountService.LoginEmployeeAsync(model);
                 var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
 
-                return Ok(new { id = employeeId});
+                return Ok(new {Token = token, id = employeeId});
             }
             catch (Exception ex)
             {

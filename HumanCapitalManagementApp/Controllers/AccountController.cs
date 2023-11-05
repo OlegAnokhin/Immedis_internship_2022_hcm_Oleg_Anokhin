@@ -131,9 +131,9 @@
                 {
                     string json = await response.Content.ReadAsStringAsync();
                     dynamic responseData = JObject.Parse(json);
-                    int id = responseData.id;
+                    int employeeId = responseData.id;
 
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
                 }
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {

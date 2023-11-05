@@ -1,4 +1,6 @@
-﻿namespace HumanCapitalManagementApp.Services
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace HumanCapitalManagementApp.Services
 {
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
@@ -79,19 +81,34 @@
             }
         }
 
-        public async Task<ClaimsIdentity> LoginEmployeeAsync(LoginFormModel model)
+        //public async Task<ClaimsIdentity> LoginEmployeeAsync(LoginFormModel model)
+        //{
+        //    var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
+
+        //    if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
+        //    {
+        //        var result = Authenticate(employee);
+
+        //        var token = GenerateJwtToken(model.UserName);
+
+        //        return result;
+        //    }
+        //    return null;
+        //}
+
+        public async Task<(ClaimsIdentity Identity, string Token)> LoginEmployeeAsync(LoginFormModel model)
         {
             var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
 
             if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
             {
-                var result = Authenticate(employee);
+                var identity = Authenticate(employee);
 
                 var token = GenerateJwtToken(model.UserName);
 
-                return result;
+                return (identity, token);
             }
-            return null;
+            return (null, null);
         }
 
         public async Task<int> TakeIdByUsernameAsync(string username)
@@ -137,15 +154,10 @@
 
         private string GenerateJwtToken(string username)
         {
-            //var employee = dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == username);
-            //var id = employee.Id.ToString();
-
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
-                //new Claim(JwtRegisteredClaimNames.NameId, id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                //new Claim(ClaimTypes.Role,"Employee")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"));
