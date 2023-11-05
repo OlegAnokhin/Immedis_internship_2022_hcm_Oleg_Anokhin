@@ -1,11 +1,10 @@
-﻿using HumanCapitalManagementApp.ViewModels.Employee;
-
-namespace HumanCapitalManagementAPI.Controllers
+﻿namespace HumanCapitalManagementAPI.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
 
+    using HumanCapitalManagementApp.Services.Data.Models;
     using HumanCapitalManagementApp.Services.Interfaces;
+    using HumanCapitalManagementApp.ViewModels.Employee;
 
     [Route("[controller]")]
     [ApiController]
@@ -20,6 +19,28 @@ namespace HumanCapitalManagementAPI.Controllers
             this.employeeService = employeeService;
             this.departmentService = departmentService;
             this.positionService = positionService;
+        }
+
+        [HttpPut]
+        //[Authorize]
+        [Route("All")]
+        public async Task<IActionResult> All([FromBody] AllEmployeesQueryModel queryModel)
+        {
+            try
+            {
+                AllEmployeesFilteredAndPagedServiceModel serviceModel = await this.employeeService.AllAsync(queryModel);
+
+                queryModel.Employees = serviceModel.Employees;
+                queryModel.TotalEmployees = serviceModel.TotalEmployeesCount;
+                queryModel.Departments = await this.departmentService.AllDepartmentNamesAsync();
+                queryModel.Positions = await this.positionService.AllPositionNamesAsync();
+
+                return Ok(queryModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
         }
 
         [HttpGet]
@@ -43,7 +64,7 @@ namespace HumanCapitalManagementAPI.Controllers
                 return StatusCode(500, "Error: " + ex.Message);
             }
         }
-        
+
         [HttpGet]
         //[Authorize]
         [Route("AboutMe/{employeeId}")]
@@ -65,7 +86,7 @@ namespace HumanCapitalManagementAPI.Controllers
                 return StatusCode(500, "Error: " + ex.Message);
             }
         }
-        
+
         [HttpGet]
         //[Authorize]
         [Route("Edit/{employeeId}")]
@@ -91,7 +112,7 @@ namespace HumanCapitalManagementAPI.Controllers
                 return StatusCode(500, "Error: " + ex.Message);
             }
         }
-        
+
         [HttpPost]
         //[Authorize]
         [Route("Edit/{employeeId}")]
@@ -122,7 +143,7 @@ namespace HumanCapitalManagementAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPut]
         //[Authorize]
         [Route("Delete/{employeeId}")]
         public async Task<IActionResult> Delete(int employeeId)
@@ -145,5 +166,27 @@ namespace HumanCapitalManagementAPI.Controllers
             }
         }
 
+        [HttpPut]
+        //[Authorize]
+        [Route("Hire/{employeeId}")]
+        public async Task<IActionResult> Hire(int employeeId)
+        {
+            bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
+
+            if (!employeeExist)
+            {
+                return NotFound("Invalid identifier");
+            }
+            try
+            {
+                await this.employeeService.SetIsHiredOnTrue(employeeId);
+
+                return Ok("Success");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
     }
 }

@@ -18,20 +18,29 @@
             this.client.BaseAddress = baseAddress;
         }
 
-        //[HttpGet]
+        [HttpGet]
         //[Authorize(Roles = "Administrator")]
-        //public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
-        //{
-        //    AllEmployeesFilteredAndPagedServiceModel serviceModel =
-        //        await this.employeeService.AllAsync(queryModel);
+        public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync(client.BaseAddress + $"APIEmployee/All", queryModel);
 
-        //    queryModel.Employees = serviceModel.Employees;
-        //    queryModel.TotalEmployees = serviceModel.TotalEmployeesCount;
-        //    queryModel.Departments = await this.departmentService.AllDepartmentNamesAsync();
-        //    queryModel.Positions = await this.positionService.AllPositionNamesAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<AllEmployeesQueryModel>(json);
 
-        //    return this.View(queryModel);
-        //}
+                return View("All", model);
+            }
+
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                string errorMessage = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, errorMessage); ;
+                return View(queryModel);
+            }
+
+            return View(queryModel);
+        }
 
         [HttpGet]
         [AllowAnonymous]
@@ -110,41 +119,36 @@
             return RedirectToAction("Error", "Home");
         }
 
-        //public async Task<IActionResult> Hire(int id)
-        //{
-        //    bool employeeExist = await this.employeeService
-        //        .ExistByIdAsync(id);
+        public async Task<IActionResult> Hire(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PutAsync(client.BaseAddress + $"APIEmployee/Hire/{id}", null);
 
-        //    if (!employeeExist)
-        //    {
-        //        TempData["ErrorMessage"] = "Record whit this Id not exist.";
-        //        return RedirectToAction("Error", "Home");
-        //    }
+                if (response.IsSuccessStatusCode)
+                {
+                    string returnUrl = Request.Headers["Referer"].ToString();
 
-        //    try
-        //    {
-        //        await this.employeeService.SetIsHiredOnTrue(id);
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
 
-        //        string returnUrl = Request.Headers["Referer"].ToString();
-
-        //        if (!string.IsNullOrEmpty(returnUrl))
-        //        {
-        //            return Redirect(returnUrl);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        TempData["ErrorMessage"] = "An unexpected error occurred";
-        //        return RedirectToAction("Error", "Home");
-        //    }
-        //    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
-        //}
+            return RedirectToAction("Error", "Home");
+        }
 
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIEmployee/Delete/{id}");
+                HttpResponseMessage response = await client.PutAsync(client.BaseAddress + $"APIEmployee/Delete/{id}", null);
 
                 if (response.IsSuccessStatusCode)
                 {
