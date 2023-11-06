@@ -22,7 +22,7 @@
         //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
         {
-            HttpResponseMessage response = await client.PutAsJsonAsync(client.BaseAddress + $"APIEmployee/All", queryModel);
+            HttpResponseMessage response = await client.PostAsJsonAsync(client.BaseAddress + $"APIEmployee/All", queryModel);
 
             if (response.IsSuccessStatusCode)
             {

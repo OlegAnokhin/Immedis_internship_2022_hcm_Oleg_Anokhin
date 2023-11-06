@@ -36,13 +36,10 @@ namespace HumanCapitalManagementApp
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = "https://localhost:7242",
-                        ValidAudience = "https://localhost:7242",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)")),
-                        RoleClaimType = ClaimTypes.Role
-                        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        //ValidAudience = builder.Configuration["Jwt:Audience"],
-                        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                        //RoleClaimType = ClaimTypes.Role
                     };
                 });
 
@@ -83,7 +80,6 @@ namespace HumanCapitalManagementApp
             builder.Services.AddDistributedMemoryCache();
 
             builder.Services.AddControllersWithViews();
-
 
             WebApplication app = builder.Build();
 

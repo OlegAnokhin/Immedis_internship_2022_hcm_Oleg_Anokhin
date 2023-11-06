@@ -81,35 +81,31 @@ namespace HumanCapitalManagementApp.Services
             }
         }
 
-        //public async Task<ClaimsIdentity> LoginEmployeeAsync(LoginFormModel model)
-        //{
-        //    var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
-
-        //    if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
-        //    {
-        //        var result = Authenticate(employee);
-
-        //        var token = GenerateJwtToken(model.UserName);
-
-        //        return result;
-        //    }
-        //    return null;
-        //}
-
-        public async Task<(ClaimsIdentity Identity, string Token)> LoginEmployeeAsync(LoginFormModel model)
+        public async Task<bool> LoginEmployeeAsync(LoginFormModel model)
         {
             var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
 
             if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
             {
-                var identity = Authenticate(employee);
-
-                var token = GenerateJwtToken(model.UserName);
-
-                return (identity, token);
+                return true;
             }
-            return (null, null);
+            return false;
         }
+
+        //public async Task<(ClaimsIdentity Identity, string Token)> LoginEmployeeAsync(LoginFormModel model)
+        //{
+        //    var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
+
+        //    if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
+        //    {
+        //        //var identity = Authenticate(employee);
+
+        //        var token = GenerateJwtToken(model.UserName);
+
+        //        return (identity, token);
+        //    }
+        //    return (null, null);
+        //}
 
         public async Task<int> TakeIdByUsernameAsync(string username)
         {
@@ -122,56 +118,56 @@ namespace HumanCapitalManagementApp.Services
             return employee.Id;
         }
 
-        private ClaimsIdentity Authenticate(Employee employee)
-        {
-            var claims = new List<Claim>();
+        //private ClaimsIdentity Authenticate(Employee employee)
+        //{
+        //    var claims = new List<Claim>();
 
-            if (employee.UserName == "admin")
-            {
-                claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "Administrator")
-                };
+        //    if (employee.UserName == "admin")
+        //    {
+        //        claims = new List<Claim>
+        //        {
+        //            new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
+        //            new Claim(ClaimsIdentity.DefaultRoleClaimType, "Administrator")
+        //        };
 
-                return new ClaimsIdentity(claims, "ApplicationCookie",
-                    ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-            }
-            else
-            {
-                claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, "Employee")
-            };
+        //        return new ClaimsIdentity(claims, "ApplicationCookie",
+        //            ClaimsIdentity.DefaultNameClaimType,
+        //            ClaimsIdentity.DefaultRoleClaimType);
+        //    }
+        //    else
+        //    {
+        //        claims = new List<Claim>
+        //    {
+        //        new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
+        //        new Claim(ClaimsIdentity.DefaultRoleClaimType, "Employee")
+        //    };
 
-                return new ClaimsIdentity(claims, "ApplicationCookie",
-                           ClaimsIdentity.DefaultNameClaimType,
-                           ClaimsIdentity.DefaultRoleClaimType);
-            }
-        }
+        //        return new ClaimsIdentity(claims, "ApplicationCookie",
+        //                   ClaimsIdentity.DefaultNameClaimType,
+        //                   ClaimsIdentity.DefaultRoleClaimType);
+        //    }
+        //}
 
-        private string GenerateJwtToken(string username)
-        {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
+        //private string GenerateJwtToken(string username)
+        //{
+        //    var claims = new[]
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Sub, username),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //    };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"));
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"));
 
-            var token = new JwtSecurityToken(
-                issuer: "https://localhost:7242",
-                audience: "https://localhost:7242",
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(60),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-            );
+        //    var token = new JwtSecurityToken(
+        //        issuer: "https://localhost:7242",
+        //        audience: "https://localhost:7242",
+        //        claims: claims,
+        //        expires: DateTime.UtcNow.AddMinutes(60),
+        //        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+        //    );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
 
         private bool VerifyPassword(string inputPassword, string hashedPassword)
         {

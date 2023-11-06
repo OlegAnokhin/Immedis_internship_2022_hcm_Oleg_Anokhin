@@ -45,7 +45,7 @@
         {
             try
             {
-                HttpResponseMessage response = await client.PostAsJsonAsync(client.BaseAddress+ "APIAccount/Register", model);
+                HttpResponseMessage response = await client.PostAsJsonAsync(client.BaseAddress + "APIAccount/Register", model);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -92,31 +92,45 @@
                     dynamic responseData = JObject.Parse(json);
                     int employeeId = responseData.id;
 
+                    HttpResponseMessage responseToken =
+                        await client.PostAsJsonAsync(client.BaseAddress + "Token/Post", model);
+
+                    if (responseToken.IsSuccessStatusCode)
+                    {
+                        string token = await responseToken.Content.ReadAsStringAsync();
+                        Response.Cookies.Append("JWToken", token);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Error", "Home");
+                    }
+
                     return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
                 }
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {
                     ModelState.AddModelError(string.Empty, "Username already exist.");
-                    return View(model);
+                    return RedirectToAction("Error", "Home");
                 }
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return View(model);
+                    return RedirectToAction("Error", "Home");
                 }
             }
             catch (Exception)
             {
                 TempData["ErrorMessage"] = "Invalid username or password";
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Error", "Home");
             }
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Error", "Home");
         }
 
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            Response.Cookies.Delete("JWToken");
 
             return RedirectToAction("Index", "Home");
         }

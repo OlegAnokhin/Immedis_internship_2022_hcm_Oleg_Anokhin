@@ -5,6 +5,7 @@
     using HumanCapitalManagementApp.Services.Data.Models;
     using HumanCapitalManagementApp.Services.Interfaces;
     using HumanCapitalManagementApp.ViewModels.Employee;
+    using Microsoft.AspNetCore.Authorization;
 
     [Route("[controller]")]
     [ApiController]
@@ -21,7 +22,7 @@
             this.positionService = positionService;
         }
 
-        [HttpPut]
+        [HttpPost]
         //[Authorize]
         [Route("All")]
         public async Task<IActionResult> All([FromBody] AllEmployeesQueryModel queryModel)
