@@ -1,4 +1,6 @@
-﻿namespace HumanCapitalManagementAPI.Controllers
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+namespace HumanCapitalManagementAPI.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
 
@@ -67,7 +69,7 @@
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize(policy: "WebApi")]
         [Route("AboutMe/{employeeId}")]
         public async Task<IActionResult> AboutMe(int employeeId)
         {

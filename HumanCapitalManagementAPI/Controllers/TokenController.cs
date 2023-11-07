@@ -52,7 +52,6 @@
                         claims,
                         expires: DateTime.UtcNow.AddMinutes(60),
                         signingCredentials: signIn);
-
                     return Ok(new JwtSecurityTokenHandler().WriteToken(token));
                 }
                 else
