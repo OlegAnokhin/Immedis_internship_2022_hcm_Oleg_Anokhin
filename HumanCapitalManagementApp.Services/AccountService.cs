@@ -14,14 +14,18 @@ namespace HumanCapitalManagementApp.Services
     using HumanCapitalManagementApp.Data;
     using HumanCapitalManagementApp.Data.Models;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.Extensions.Configuration;
 
     public class AccountService : IAccountService
     {
         private readonly HumanCapitalManagementAppDbContext dbContext;
+        public IConfiguration config;
 
-        public AccountService(HumanCapitalManagementAppDbContext dbContext)
+
+        public AccountService(HumanCapitalManagementAppDbContext dbContext, IConfiguration config)
         {
             this.dbContext = dbContext;
+            this.config = config;
         }
 
         public async Task<bool> ExistByUsername(string username)
@@ -81,35 +85,35 @@ namespace HumanCapitalManagementApp.Services
             }
         }
 
-        public async Task<bool> LoginEmployeeAsync(LoginFormModel model)
-        {
-            var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
-
-            if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        //public async Task<(ClaimsIdentity Identity, string Token)> LoginEmployeeAsync(LoginFormModel model)
+        //public async Task<bool> LoginEmployeeAsync(LoginFormModel model)
         //{
         //    var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
 
         //    if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
         //    {
-        //        //var identity = Authenticate(employee);
-
-        //        var token = GenerateJwtToken(model.UserName);
-
-        //        return (identity, token);
+        //        return true;
         //    }
-        //    return (null, null);
+        //    return false;
         //}
+
+        public async Task<(ClaimsIdentity Identity, string Token)> LoginEmployeeAsync(LoginFormModel model)
+        {
+            var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
+
+            if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
+            {
+                var identity = Authenticate(employee);
+
+                var token = await GenerateJwtToken(model);
+
+                return (identity, token);
+            }
+            return (null, null);
+        }
 
         public async Task<int> TakeIdByUsernameAsync(string username)
         {
-            var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == username);
+            var employee = await dbContext.Employees.FirstOrDefaultAsync(e => e.UserName == username);
 
             if (employee == null)
             {
@@ -118,60 +122,83 @@ namespace HumanCapitalManagementApp.Services
             return employee.Id;
         }
 
-        //private ClaimsIdentity Authenticate(Employee employee)
-        //{
-        //    var claims = new List<Claim>();
+        private ClaimsIdentity Authenticate(Employee employee)
+        {
+            var claims = new List<Claim>();
 
-        //    if (employee.UserName == "admin")
-        //    {
-        //        claims = new List<Claim>
-        //        {
-        //            new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
-        //            new Claim(ClaimsIdentity.DefaultRoleClaimType, "Administrator")
-        //        };
+            if (employee.UserName == "admin")
+            {
+                claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "Administrator")
+                };
 
-        //        return new ClaimsIdentity(claims, "ApplicationCookie",
-        //            ClaimsIdentity.DefaultNameClaimType,
-        //            ClaimsIdentity.DefaultRoleClaimType);
-        //    }
-        //    else
-        //    {
-        //        claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
-        //        new Claim(ClaimsIdentity.DefaultRoleClaimType, "Employee")
-        //    };
+                return new ClaimsIdentity(claims, "ApplicationCookie",
+                    ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType);
+            }
+            else
+            {
+                claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, "Employee")
+            };
 
-        //        return new ClaimsIdentity(claims, "ApplicationCookie",
-        //                   ClaimsIdentity.DefaultNameClaimType,
-        //                   ClaimsIdentity.DefaultRoleClaimType);
-        //    }
-        //}
+                return new ClaimsIdentity(claims, "ApplicationCookie",
+                           ClaimsIdentity.DefaultNameClaimType,
+                           ClaimsIdentity.DefaultRoleClaimType);
+            }
+        }
 
-        //private string GenerateJwtToken(string username)
-        //{
-        //    var claims = new[]
-        //    {
-        //        new Claim(JwtRegisteredClaimNames.Sub, username),
-        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        //    };
+        private async Task<string> GenerateJwtToken(LoginFormModel model)
+        {
+            if (model != null && model.UserName != null && model.Password != null)
+            {
+                var user = await GetUser(model.UserName);
+                if (user != null)
+                {
+                    var claims = new[]
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, config["Jwt:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim("Id", user.Id.ToString()),
+                        new Claim("UserName", user.UserName),
+                        new Claim("Password", user.HashedPassword)
+                    };
 
-        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is very Unbreakable Key believe it :)"));
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
+                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        //    var token = new JwtSecurityToken(
-        //        issuer: "https://localhost:7242",
-        //        audience: "https://localhost:7242",
-        //        claims: claims,
-        //        expires: DateTime.UtcNow.AddMinutes(60),
-        //        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-        //    );
-
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
-
+                    var token = new JwtSecurityToken(
+                        config["Jwt:Issuer"],
+                        config["Jwt:Audience"],
+                        claims,
+                        expires: DateTime.UtcNow.AddMinutes(60),
+                        signingCredentials: signIn);
+                    return (new JwtSecurityTokenHandler().WriteToken(token));
+                }
+                else
+                {
+                    throw new InvalidExpressionException("Unexpected error.");
+                }
+            }
+            else
+            {
+                throw new InvalidExpressionException("Unexpected error.");
+            }
+        }
         private bool VerifyPassword(string inputPassword, string hashedPassword)
         {
             return BCrypt.Verify(inputPassword, hashedPassword);
+        }
+
+        [HttpGet]
+        private async Task<Employee> GetUser(string username)
+        {
+            return await dbContext.Employees.FirstOrDefaultAsync(e => e.UserName == username);
         }
     }
 }

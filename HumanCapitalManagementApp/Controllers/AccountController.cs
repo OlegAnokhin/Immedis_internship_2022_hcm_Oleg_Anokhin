@@ -10,6 +10,7 @@
     using System.Net;
     using System.Net.Http;
     using Models.Account;
+    using System.Security.Claims;
 
     public class AccountController : BaseController
     {
@@ -91,21 +92,27 @@
                     string json = await response.Content.ReadAsStringAsync();
                     dynamic responseData = JObject.Parse(json);
                     int employeeId = responseData.id;
+                    string token = responseData.Token;
+                    //string token = await responseData.Content.ReadAsStringAsync();
+                    //ClaimsIdentity identity = await responseData.Content.ReadAsStringAsync();
 
-                    HttpResponseMessage responseToken =
-                        await client.PostAsJsonAsync(client.BaseAddress + "Token/Post", model);
+                    HttpContext.Session.SetString("Token", token);
+                    Response.Cookies.Append("JWToken", token);
 
-                    if (responseToken.IsSuccessStatusCode)
-                    {
-                        string token = await responseToken.Content.ReadAsStringAsync();
-                        Response.Cookies.Append("JWToken", token);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Error", "Home");
-                    }
+                    //HttpResponseMessage responseToken =
+                    //    await client.PostAsJsonAsync(client.BaseAddress + "Token/Post", model);
 
-                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
+                    //if (responseToken.IsSuccessStatusCode)
+                    //{
+                    //    string token = await responseToken.Content.ReadAsStringAsync();
+                    //    Response.Cookies.Append("JWToken", token);
+                    //}
+                    //else
+                    //{
+                    //    return RedirectToAction("Error", "Home");
+                    //}
+
+                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId});
                 }
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {

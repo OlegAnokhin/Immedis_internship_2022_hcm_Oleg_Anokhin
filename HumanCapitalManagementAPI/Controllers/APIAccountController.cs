@@ -5,6 +5,7 @@
 
     using HumanCapitalManagementApp.Models.Account;
     using HumanCapitalManagementApp.Services.Interfaces;
+    using System.Security.Claims;
 
     [Route("[controller]")]
     [ApiController]
@@ -83,18 +84,15 @@
                     return BadRequest(ModelState);
                 }
 
-                if (await accountService.LoginEmployeeAsync(model))
-                {
-                    var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
-                    return Ok(new {id = employeeId});
-                };
+                var (identity, token) = await accountService.LoginEmployeeAsync(model);
+                var employeeId = await accountService.TakeIdByUsernameAsync(model.UserName);
 
+                return Ok(new { id = employeeId, Token = token});
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Error: " + ex.Message);
             }
-            return BadRequest(ModelState);
         }
     }
 }

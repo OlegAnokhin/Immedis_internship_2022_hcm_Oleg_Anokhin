@@ -18,7 +18,6 @@
             this.client.BaseAddress = baseAddress;
         }
 
-        [HttpGet]
         //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
         {
@@ -43,7 +42,6 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> SuccessLogin(int employeeId)
         {
             HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIEmployee/SuccessLogin/{employeeId}");

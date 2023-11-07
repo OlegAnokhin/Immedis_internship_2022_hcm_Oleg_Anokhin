@@ -78,9 +78,9 @@ namespace HumanCapitalManagementAPI
                     };
                 });
 
-            builder.Services.AddMvc();
+           // builder.Services.AddMvc();
 
-            //builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization();
 
             //builder.Services.AddControllers();
             builder.Services.AddControllers().AddJsonOptions(opt =>
@@ -104,6 +104,8 @@ namespace HumanCapitalManagementAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
             //if (app.Environment.IsDevelopment())
             //{
@@ -121,7 +123,6 @@ namespace HumanCapitalManagementAPI
             {
                 end.MapControllers();
             });
-            //app.UseAuthentication();
 
             //app.MapControllers();
 

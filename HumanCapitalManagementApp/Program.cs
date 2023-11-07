@@ -4,7 +4,6 @@ namespace HumanCapitalManagementApp
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using System.Text;
-    using System.Security.Claims;
     using System.Net.Http.Headers;
 
     public class Program
@@ -13,16 +12,6 @@ namespace HumanCapitalManagementApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            //עמגא סו ןנטלוסעט ג ÀÏÈ
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-            //builder.Services.AddDbContext<HumanCapitalManagementAppDbContext>(options =>
-            //    options.UseSqlServer(connectionString));
-
-
-            //עמגא םו נאבמעט
             builder.Services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -39,7 +28,6 @@ namespace HumanCapitalManagementApp
                         ValidIssuer = builder.Configuration["Jwt:Issuer"],
                         ValidAudience = builder.Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-                        //RoleClaimType = ClaimTypes.Role
                     };
                 });
 
@@ -63,37 +51,26 @@ namespace HumanCapitalManagementApp
 
             builder.Services.AddAuthorization();
 
-            //עמגא םו נאבמעט
-            //builder.Services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("UserCredentials", policy =>
-            //    {
-            //        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-            //        policy.RequireRole("Employee");
-            //    });
-            //});
-
-            //builder.Services.AddApplicationServices(typeof(IAccountService));
-
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDistributedMemoryCache();
 
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             WebApplication app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            //עמגא סו ןנולוסעט ג ÀÏÈ 
-            //var scope = app.Services.CreateScope();
-            //scope.ServiceProvider.GetService<HumanCapitalManagementAppDbContext>()?.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
 
@@ -104,16 +81,9 @@ namespace HumanCapitalManagementApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapDefaultControllerRoute();
-            //app.UseEndpoints(config =>
-            //{
-            //    config.MapControllerRoute(
-            //        name: "areas",
-            //        pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}"
-            //    );
+            app.UseSession();
 
-            //    config.MapDefaultControllerRoute();
-            //});
+            app.MapDefaultControllerRoute();
 
             app.Run();
         }

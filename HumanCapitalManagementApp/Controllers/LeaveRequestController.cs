@@ -1,135 +1,182 @@
-﻿//using Microsoft.AspNetCore.Authorization;
+﻿namespace HumanCapitalManagementApp.Controllers
+{
+    using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
+    using System.Net;
 
-//namespace HumanCapitalManagementApp.Controllers
-//{
-//    using Microsoft.AspNetCore.Mvc;
+    using ViewModels.LeaveRequest;
 
-//    using Services.Interfaces;
-//    using ViewModels.LeaveRequest;
-    
-//    public class LeaveRequestController : BaseController
-//    {
-//        private readonly ILeaveRequestService leaveRequestService;
-//        private readonly IEmployeeService employeeService;
+    public class LeaveRequestController : BaseController
+    {
+        private Uri baseAddress = new Uri("http://localhost:5152");
+        HttpClient client;
 
-//        public LeaveRequestController(ILeaveRequestService leaveRequestService, IEmployeeService employeeService)
-//        {
-//            this.leaveRequestService = leaveRequestService;
-//            this.employeeService = employeeService;
-//        }
+        public LeaveRequestController()
+        {
+            this.client = new HttpClient();
+            this.client.BaseAddress = baseAddress;
+        }
 
-//        [Authorize(Roles = "Administrator")]
-//        public async Task<IActionResult> AllForAdmin()
-//        {
-//            try
-//            {
-//                var model = await this.leaveRequestService.AllRequestsForAdmin();
+        //[Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> AllForAdmin()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APILeaveRequest/All");
 
-//                return View(model);
-//            }
-//            catch (Exception)
-//            {
-//                TempData["ErrorMessage"] = "An unexpected error occurred";
-//                return RedirectToAction("Error", "Home");
-//            }
-//        }
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<LeaveRequestViewModel> leaveRequests = JsonConvert.DeserializeObject<List<LeaveRequestViewModel>>(json);
+                    return View(leaveRequests);
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    return RedirectToAction("Error", "Home");
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
 
-//        public async Task<IActionResult> All(int id)
-//        {
-//            try
-//            {
-//                var model = await this.leaveRequestService
-//                    .AllLeaveRequestAsync(id);
-//                return View(model);
-//            }
-//            catch (Exception)
-//            {
-//                TempData["ErrorMessage"] = "An unexpected error occurred";
-//                return RedirectToAction("Error", "Home");
-//            }
-//        }
+            return RedirectToAction("Error", "Home");
+        }
 
-//        [HttpGet]
-//        public IActionResult Add()
-//        {
-//            LeaveRequestViewModel model = new LeaveRequestViewModel()
-//            {
-//                From = DateTime.Today,
-//                To = DateTime.Today
-//            };
-//            return View(model);
-//        }
+        public async Task<IActionResult> All(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APILeaveRequest/All/{id}");
 
-//        [HttpPost]
-//        public async Task<IActionResult> Add(int id, LeaveRequestViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//            {
-//                return RedirectToAction("Error", "Home");
-//            }
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var model = JsonConvert.DeserializeObject<DetailsRequestsViewModel>(json);
 
-//            bool employeeExist = await this.employeeService.ExistByIdAsync(id);
-            
-//            if (!employeeExist)
-//            {
-//                TempData["ErrorMessage"] = "Employee not exist";
-//                return RedirectToAction("Error", "Home");
-//            }
+                    return View(model);
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    return RedirectToAction("Error", "Home");
+                }
+                if(response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    return RedirectToAction("Error", "Home");
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
 
-//            try
-//            {
-//                await this.leaveRequestService.AddLeaveRequestAsync(id, model);
+            return RedirectToAction("Error", "Home");
+        }
 
-//                return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+        [HttpGet]
+        public IActionResult Add()
+        {
+            LeaveRequestViewModel model = new LeaveRequestViewModel()
+            {
+                From = DateTime.Today,
+                To = DateTime.Today
+            };
+            return View(model);
+        }
 
-//            }
-//            catch (Exception)
-//            {
-//                TempData["ErrorMessage"] = "An unexpected error occurred";
-//                return RedirectToAction("Error", "Home");
-//            }
-//        }
+        [HttpPost]
+        public async Task<IActionResult> Add(int id, LeaveRequestViewModel model)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync(client.BaseAddress + $"APILeaveRequest/Add/{id}", model);
 
-//        public async Task<IActionResult> Approve(int id)
-//        {
-//            try
-//            {
-//                await this.leaveRequestService.SetApproveAsync(id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    return View(model);
+                }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    return RedirectToAction("Error", "Home");
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+            return RedirectToAction("Error", "Home");
+        }
 
-//                string returnUrl = Request.Headers["Referer"].ToString();
+        public async Task<IActionResult> Approve(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PutAsync(client.BaseAddress + $"APILeaveRequest/Approve/{id}", null);
 
-//                if (!string.IsNullOrEmpty(returnUrl))
-//                {
-//                    return Redirect(returnUrl);
-//                }
-//            }
-//            catch (Exception)
-//            {
-//                TempData["ErrorMessage"] = "An unexpected error occurred";
-//                return RedirectToAction("Error", "Home");
-//            }
-//            return RedirectToAction("Index", "Home");
-//        }
+                if (response.IsSuccessStatusCode)
+                {
+                    string returnUrl = Request.Headers["Referer"].ToString();
 
-//        public async Task<IActionResult> Delete(int id)
-//        {
-//            try
-//            {
-//                await this.leaveRequestService.DeleteLeaveRequestByIdAsync(id);
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    if (response.StatusCode == HttpStatusCode.InternalServerError)
+                    {
+                        string errorMessage = await response.Content.ReadAsStringAsync();
+                        ModelState.AddModelError(string.Empty, errorMessage); ;
+                        return RedirectToAction("Error", "Home");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
 
-//                string returnUrl = Request.Headers["Referer"].ToString();
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PutAsync(client.BaseAddress + $"APILeaveRequest/Delete/{id}", null);
 
-//                if (!string.IsNullOrEmpty(returnUrl))
-//                {
-//                    return Redirect(returnUrl);
-//                }
-//            }
-//            catch (Exception)
-//            {
-//                TempData["ErrorMessage"] = "An unexpected error occurred";
-//                return RedirectToAction("Error", "Home");
-//            }
-//            return RedirectToAction("Index", "Home");
-//        }
-//    }
-//}
+                if (response.IsSuccessStatusCode)
+                {
+                    string returnUrl = Request.Headers["Referer"].ToString();
+
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+    }
+}
