@@ -17,11 +17,16 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<AllPreviousPositionsViewModel>> TakeAllPreviousPositionsByIdAsync(int employeeId)
+        public async Task<DetailsPreviousPositionsViewModel> AllPreviousPositionsByIdAsync(int id)
         {
-            IEnumerable<AllPreviousPositionsViewModel> allPreviousPositions = await dbContext
+            Employee? employee = await this.dbContext
+                .Employees
+                .Include(e => e.PreviousPositions)
+                .FirstAsync(e => e.Id == id);
+
+            var previousPositions = await dbContext
                 .PreviousPositions
-                .Where(pp => pp.EmployeeId == employeeId)
+                .Where(pp => pp.EmployeeId == id)
                 .Select(p => new AllPreviousPositionsViewModel
                 {
                     Id = p.Id,
@@ -30,10 +35,14 @@
                     From = p.From,
                     To = p.To,
                     Salary = p.Salary,
-                    EmployeeId = employeeId
+                    EmployeeId = id
                 })
-                .ToListAsync();
-            return allPreviousPositions;
+                .ToArrayAsync();
+            return new DetailsPreviousPositionsViewModel()
+            {
+                EmployeeId = id,
+                PreviousPositions = previousPositions
+            };
         }
 
         public async Task AddPreviousPositionAsync(int id, AddPreviousPositionsFormModel model)

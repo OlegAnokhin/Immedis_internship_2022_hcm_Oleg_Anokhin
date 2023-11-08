@@ -10,6 +10,7 @@
     <a asp-area="" asp-controller="PreviousPosition" asp-action="Add" asp-route-id="@Model.EmployeeId"
        class="btn btn-secondary">Add</a>
 </div>
+<hr />
 
 @if (!Model.PreviousPositions.Any())
 {
@@ -19,10 +20,12 @@
 }
 @foreach (var position in Model.PreviousPositions)
 {
-    <div class="card mb-3">
-        <div class="card-body">
-            <p class="h5">Id: <b>@position.Id</b></p>
-            <div class="col-xs-6">
+    <div class="card-body text-center">
+        <div class="row">
+            <div class="card-body text-center">
+                <p class="h5">Id: <b>@position.Id</b></p>
+                <p></p>
+                <p></p>
                 <p class="h5">Department: <b>@position.Department</b></p>
                 <p></p>
                 <p></p>
@@ -44,4 +47,5 @@
             </div>
         </div>
     </div>
+    <hr />
 }

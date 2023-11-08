@@ -4,7 +4,7 @@
 
     public interface IPreviousPositionService
     {
-        Task<IEnumerable<AllPreviousPositionsViewModel>> TakeAllPreviousPositionsByIdAsync(int employeeId);
+        Task<DetailsPreviousPositionsViewModel> AllPreviousPositionsByIdAsync(int employeeId);
 
         Task AddPreviousPositionAsync (int id, AddPreviousPositionsFormModel model);
 
