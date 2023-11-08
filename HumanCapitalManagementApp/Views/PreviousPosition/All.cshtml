@@ -1,16 +1,23 @@
-﻿@model IEnumerable<AllPreviousPositionsViewModel>
+﻿@model DetailsPreviousPositionsViewModel
 @{
-    ViewData["Title"] = "All Previous Positions";
+    ViewData["Title"] = "Previous Positions";
 }
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
-@if (!Model.Any())
+
+<div class="card-body text-center">
+    <p>Add new record for your leave request</p>
+    <a asp-area="" asp-controller="PreviousPosition" asp-action="Add" asp-route-id="@Model.EmployeeId"
+       class="btn btn-secondary">Add</a>
+</div>
+
+@if (!Model.PreviousPositions.Any())
 {
     <div class="text-center">
         <h3> No entries added.</h3>
     </div>
 }
-@foreach (var position in Model)
+@foreach (var position in Model.PreviousPositions)
 {
     <div class="card mb-3">
         <div class="card-body">

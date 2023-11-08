@@ -14,15 +14,8 @@
     <div class="card mb-3">
         <div class="card-body text-center">
             <p>Previous positions in Company</p>
-            <a asp-area="" asp-controller="PreviousPosition" asp-action="PreviousPositions" asp-route-id="@Model.EmployeeId"
+            <a asp-area="" asp-controller="PreviousPosition" asp-action="All" asp-route-id="@Model.EmployeeId"
                class="btn btn-secondary">All Previous Positions</a>
-        </div>
-    </div>
-    <div class="card mb-3">
-        <div class="card-body text-center">
-            <p>Add new record for your previous position</p>
-            <a asp-area="" asp-controller="PreviousPosition" asp-action="Add" asp-route-id="@Model.EmployeeId"
-               class="btn btn-secondary">Add</a>
         </div>
     </div>
     <div class="card mb-3">
