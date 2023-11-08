@@ -6,6 +6,10 @@
 
     public class QualificationTraining
     {
+        public QualificationTraining()
+        {
+            TrainingParticipants = new HashSet<TrainingParticipant>();
+        }
         [Key]
         public int Id { get; set; }
 
@@ -27,5 +31,7 @@
         [Required]
         [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
+
+        public virtual ICollection<TrainingParticipant> TrainingParticipants { get; set; }
     }
 }

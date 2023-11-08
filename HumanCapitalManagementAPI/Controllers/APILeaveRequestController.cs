@@ -7,7 +7,7 @@
 
     [Route("[controller]")]
     [ApiController]
-    public class APILeaveRequestController : Controller
+    public class APILeaveRequestController : ControllerBase
     {
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IEmployeeService employeeService;

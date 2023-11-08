@@ -1,0 +1,35 @@
+﻿@model IEnumerable<AllQualificationTrainingViewModel>
+@{
+    ViewData["Title"] = "Qualification Trainings";
+}
+<h2 id="title" class="text-center">@ViewData["Title"]</h2>
+
+<hr />
+
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <h3>There are no qualification trainings available.</h3>
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><p>Id</p></th>
+                <th><p>Name</p></th>
+                <th><p>EmployeeId</p></th>
+                <th><p>From</p></th>
+                <th><p>To</p></th>
+                <th><p>Description</p></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var training in Model)
+            {
+                <partial name="_TrainingPartial" model="training" />
+            }
+        </tbody>
+    </table>
+}
