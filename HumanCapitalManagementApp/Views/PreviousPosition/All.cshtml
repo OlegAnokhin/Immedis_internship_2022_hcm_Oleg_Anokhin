@@ -42,7 +42,7 @@
                 <p></p>
                 <div>
                     <a asp-area="" asp-controller="PreviousPosition" asp-action="Delete" asp-route-id="@position.Id"
-                       class="btn btn-secondary">Delete</a>
+                       class="btn btn-secondary" onclick="return confirm('Are you sure you want to delete this position ?')">Delete</a>
                 </div>
             </div>
         </div>

@@ -34,13 +34,11 @@
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return RedirectToAction("Error", "Home");
                 }
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return RedirectToAction("Error", "Home");
                 }
             }
             catch (Exception)
@@ -52,72 +50,94 @@
             return RedirectToAction("Error", "Home");
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Add()
-        //{
-        //    AddPreviousPositionsFormModel model = new AddPreviousPositionsFormModel()
-        //    {
-        //        From = DateTime.Today,
-        //        To = DateTime.Today,
-        //        Positions = await this.positionService.AllPositionsAsync(),
-        //        Departments = await this.departmentService.AllDepartmentsAsync()
-        //    };
-        //    return View(model);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Add(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIPreviousPosition/Add/{id}");
 
-        //[HttpPost]
-        //public async Task<IActionResult> Add(int id, AddPreviousPositionsFormModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        model.From = DateTime.Today;
-        //        model.To = DateTime.Today;
-        //        model.Positions = await this.positionService.AllPositionsAsync();
-        //        model.Departments = await this.departmentService.AllDepartmentsAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var model = JsonConvert.DeserializeObject<AddPreviousPositionsFormModel>(json);
 
-        //        return View(model);
-        //    }
+                    return View(model);
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
 
-        //    try
-        //    {
-        //        await previousPositionService.AddPreviousPositionAsync(id, model);
-        //        return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
-        //    }
-        //    catch (Exception)
-        //    {
-        //        TempData["ErrorMessage"] = "An unexpected error occurred";
-        //        return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
-        //    }
-        //}
+            return RedirectToAction("Error", "Home");
+        }
 
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    bool positionExist = await this.previousPositionService
-        //        .ExistByIdAsync(id);
+        [HttpPost]
+        public async Task<IActionResult> Add(int id, AddPreviousPositionsFormModel model)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync(client.BaseAddress + $"APIPreviousPosition/Add/{id}", model);
 
-        //    if (!positionExist)
-        //    {
-        //        TempData["ErrorMessage"] = "Record whit this Id not exist.";
-        //        return RedirectToAction("Error", "Home");
-        //    }
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
 
-        //    try
-        //    {
-        //        await this.previousPositionService.DeletePreviousPositionByIdAsync(id);
+            return RedirectToAction("Error", "Home");
+        }
 
-        //        string returnUrl = Request.Headers["Referer"].ToString();
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PutAsync(client.BaseAddress + $"APIPreviousPosition/Delete/{id}", null);
 
-        //        if (!string.IsNullOrEmpty(returnUrl))
-        //        {
-        //            return Redirect(returnUrl);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        TempData["ErrorMessage"] = "An unexpected error occurred";
-        //        return RedirectToAction("Error", "Home");
-        //    }
-        //    return RedirectToAction("Index", "Home");
-        //}
+                if (response.IsSuccessStatusCode)
+                {
+                    string returnUrl = Request.Headers["Referer"].ToString();
+
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
     }
 }
