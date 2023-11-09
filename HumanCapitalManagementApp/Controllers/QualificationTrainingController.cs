@@ -50,5 +50,107 @@
 
             return RedirectToAction("Error", "Home");
         }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            var model = new AllQualificationTrainingViewModel()
+            {
+                From = DateTime.Today,
+                To = DateTime.Today
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AllQualificationTrainingViewModel model)
+        {
+            try
+            {
+                HttpResponseMessage response =
+                await client.PostAsJsonAsync(client.BaseAddress + $"APIQualificationTraining/Add", model);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("All", "QualificationTraining");
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIQualificationTraining/Details/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var model = JsonConvert.DeserializeObject<AllQualificationTrainingViewModel>(json);
+
+                    return View(model);
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PutAsync(client.BaseAddress + $"APIQualificationTraining/Delete/{id}", null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("All", "QualificationTraining");
+                }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
     }
 }

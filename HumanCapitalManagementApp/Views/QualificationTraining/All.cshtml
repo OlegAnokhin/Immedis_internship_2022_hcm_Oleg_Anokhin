@@ -6,6 +6,10 @@
 
 <hr />
 
+<a asp-controller="QualificationTraining" asp-action="Add" class="btn btn-secondary col-2 p-2 fw-bold border-2">Add training</a>
+<p></p>
+<hr />
+
 @if (!Model.Any())
 {
     <div class="text-center">
@@ -14,22 +18,24 @@
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><p>Id</p></th>
-                <th><p>Name</p></th>
-                <th><p>EmployeeId</p></th>
-                <th><p>From</p></th>
-                <th><p>To</p></th>
-                <th><p>Description</p></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var training in Model)
-            {
-                <partial name="_TrainingPartial" model="training" />
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        @foreach (var t in Model)
+        {
+            <div class="container mb-3" style="display:inline">
+                <div class="row">
+                    <div class="card col-6 border-0">
+                        <p class="h2"><u>@t.Name</u></p>
+                        <p class="h5">From: <b>@t.From.ToShortDateString()</b></p>
+                        <p class="h5">To: <b>@t.To.ToShortDateString()</b></p>
+                        <p class="h5">Description: <b>@t.Description</b></p>
+                        <p></p>
+                    </div>
+                </div>
+                <p></p>
+                <a asp-controller="QualificationTraining" asp-action="Details" asp-route-id="@t.Id" class="btn btn-secondary col-1 p-2 fw-bold border-2">Details</a>
+            </div>
+            <p></p>
+            <hr />
+        }
+    </div>
 }

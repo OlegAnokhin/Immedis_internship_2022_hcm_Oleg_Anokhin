@@ -14,11 +14,6 @@
         public int Id { get; set; }
 
         [Required]
-        public int EmployeeId { get; set; }
-
-        public Employee Employee { get; set; } = null!;
-
-        [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
 

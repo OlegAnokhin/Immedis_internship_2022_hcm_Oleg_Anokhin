@@ -20,9 +20,10 @@
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<PreviousPosition> PreviousPositions { get; set; } = null!;
         public DbSet<Position> Positions { get; set; } = null!;
-        public DbSet<LeaveRequest> LeaveRequests { get; set; }
-        public DbSet<QualificationTraining> QualificationsTraining { get; set; }
-        public DbSet<PerformanceManagement> PerformanceManagement { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; } = null!;
+        public DbSet<QualificationTraining> QualificationsTraining { get; set; } = null!;
+        public DbSet<TrainingParticipant> TrainingParticipants { get; set; } = null!;
+        public DbSet<PerformanceManagement> PerformanceManagement { get; set; } = null!;
         public DbSet<Role> Roles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)

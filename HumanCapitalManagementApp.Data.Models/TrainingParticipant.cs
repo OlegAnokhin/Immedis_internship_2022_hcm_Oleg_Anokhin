@@ -6,7 +6,6 @@
     {
         public int ParticipantId { get; set; }
 
-        [ForeignKey(nameof(ParticipantId))]
         public Employee Participant { get; set; }
 
         public int TrainingId { get; set; }

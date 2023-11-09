@@ -1,6 +1,6 @@
 ﻿namespace HumanCapitalManagementApp.ViewModels.QualificationTraining
 {
-    public class AllQualificationTrainingViewModel
+    public class QualificationTrainingFormModel
     {
         public int Id { get; set; }
 

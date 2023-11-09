@@ -1,0 +1,48 @@
+﻿@model AllQualificationTrainingViewModel
+
+@{
+    ViewData["Title"] = "Qualification trainings details";
+}
+
+<h2 id="title" class="text-center">@ViewData["Title"]</h2>
+<hr />
+
+<div class="row">
+    <div class="container" style="display:inline">
+        <div class="row">
+            <div class="card col-6 border-0">
+                <p class="h2"><u>@Model.Name</u></p>
+                <p></p>
+                <p class="h5">From: <b>@Model.From.ToShortDateString()</b></p>
+                <p></p>
+                <p></p>
+                <p class="h5">To: <b>@Model.To.ToShortDateString()</b></p>
+                <p></p>
+                <p></p>
+                <p class="h5">Description: <b>@Model.Description</b></p>
+                <p></p>
+                @* @if (User.IsAdmin())
+                { *@
+                <a class="mt-2" asp-controller="QualificationTraining" asp-action="Delete" asp-route-id="@Model.Id">
+                    <div>
+                        <input type="submit" value="Delete"
+                               class="btn btn-secondary m-2" onclick="return confirm('Are you sure you wan`t delete ?')" />
+                    </div>
+                </a>
+                @*  }*@
+                <div class="d-inline-flex mt-2">
+                    <a asp-controller="QualificationTraining" asp-action="Join" asp-route-id="@Model.Id">
+                        <div>
+                            <input type="submit" value="Join" class="btn btn-secondary border-2" style="margin-right: 0.5rem" />
+                        </div>
+                    </a>
+                    <a asp-controller="QualificationTraining" asp-action="Leave" asp-route-id="@Model.Id">
+                        <div>
+                            <input type="submit" value="Leave" class="btn btn-secondary border-2" style="margin-right: 0.5rem" />
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
