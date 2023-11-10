@@ -219,8 +219,15 @@ namespace HumanCapitalManagementApp.Services
                     Description = t.Training.Description
                 })
                 .ToListAsync();
+
+            decimal bonus = (decimal)trainings.Count * (decimal)100.00;
+
             return new SalaryInfoModel
             {
+                EmployeeId = employeeId,
+                Salary = employee.Salary,
+                Bonus = bonus,
+                TotalSalary = employee.Salary + bonus,
                 Trainings = trainings
             };
         }

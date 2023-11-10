@@ -6,6 +6,8 @@
     {
         Task<IEnumerable<AllQualificationTrainingViewModel>> AllTrainings();
 
+        Task<IEnumerable<AllQualificationTrainingViewModel>> MyTrainings(int id);
+
         Task AddTrainingAsync(AllQualificationTrainingViewModel model);
 
         Task<bool> ExistsByIdAsync(int id);

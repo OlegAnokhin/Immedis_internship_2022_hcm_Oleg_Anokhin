@@ -188,5 +188,27 @@
                 return StatusCode(500, "Error: " + ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("SalaryInfo/{employeeId}")]
+        public async Task<IActionResult> SalaryInfo(int employeeId)
+        {
+            try
+            {
+                bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
+
+                if (!employeeExist)
+                {
+                    return NotFound("Invalid identifier");
+                }
+                var model = await this.employeeService.SalaryInfoByIdAsync(employeeId);
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
     }
 }

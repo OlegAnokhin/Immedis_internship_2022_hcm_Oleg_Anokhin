@@ -13,14 +13,16 @@
                 {
                     <p class="h5">You have: <b>@Model.Trainings.Count() complete trainings.</b></p>
                 }
-                <p class="h5">Salary: <b>@Model.Salary</b></p>
+                else
+                {
+                    <p class="h5">You don`t have complete trainings.</p>
+                }
                 <p></p>
+                <p class="h5">Salary: <b>@Model.Salary $</b></p>
                 <p></p>
-                <p class="h5">Bonus: <b>@Model.Bonus</b></p>
+                <p class="h5">Bonus: <b>@Model.Bonus $</b></p>
                 <p></p>
-                <p></p>
-                <p class="h5">Total Salary: <b>@Model.TotalSalary</b></p>
-                <p></p>
+                <p class="h5">Total Salary: <b>@Model.TotalSalary $</b></p>
                 <p></p>
             </div>
         </div>

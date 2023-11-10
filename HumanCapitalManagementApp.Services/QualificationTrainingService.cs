@@ -35,6 +35,25 @@
             return trainings;
         }
 
+        public async Task<IEnumerable<AllQualificationTrainingViewModel>> MyTrainings(int id)
+        {
+            var trainings = await this.dbContext
+                .TrainingParticipants
+                .Include(t => t.Participant)
+                .Where(t => t.ParticipantId == id)
+                .Select(t => new AllQualificationTrainingViewModel
+                {
+                    Id = t.Training.Id,
+                    Name = t.Training.Name,
+                    From = t.Training.From,
+                    To = t.Training.To,
+                    Description = t.Training.Description
+                })
+                .OrderByDescending(t => t.From)
+                .ToListAsync();
+            return trainings;
+        }
+
         public async Task AddTrainingAsync(AllQualificationTrainingViewModel model)
         {
             QualificationTraining training = new QualificationTraining

@@ -100,7 +100,7 @@
                 {
                     return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = id });
                 }
-                
+
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
@@ -167,6 +167,31 @@
             return RedirectToAction("Error", "Home");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SalaryInfo(int id)
+        {
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress + $"APIEmployee/SalaryInfo/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<SalaryInfoModel>(json);
+
+                return View("SalaryInfo", model);
+            }
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                string errorMessage = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, errorMessage); ;
+            }
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                string errorMessage = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, errorMessage); ;
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
 
         [HttpGet]
         public IActionResult QualificationTraining()

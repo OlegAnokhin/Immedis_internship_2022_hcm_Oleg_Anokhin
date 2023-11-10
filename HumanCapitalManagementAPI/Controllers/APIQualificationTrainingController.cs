@@ -1,4 +1,6 @@
-﻿namespace HumanCapitalManagementAPI.Controllers
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace HumanCapitalManagementAPI.Controllers
 {
     using System.Security.Claims;
     using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,28 @@
                 return StatusCode(500, "Error: " + ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("My/{id}")]
+        public async Task<IActionResult> My(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    return NotFound("Invalid identifier");
+                }
+
+                var model = await this.qualificationTrainingService.MyTrainings(id);
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+
 
         [HttpPost]
         [Route("Add")]
