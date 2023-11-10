@@ -152,5 +152,67 @@
 
             return RedirectToAction("Error", "Home");
         }
+
+        public async Task<IActionResult> Join(int id)
+        {
+            try
+            {
+                HttpResponseMessage response =
+                    await client.PostAsync(client.BaseAddress + $"APIQualificationTraining/Join/{id}", null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("All", "QualificationTraining");
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        public async Task<IActionResult> Leave(int id)
+        {
+            try
+            {
+                HttpResponseMessage response =
+                    await client.PostAsync(client.BaseAddress + $"APIQualificationTraining/Leave/{id}", null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("All", "QualificationTraining");
+                }
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred";
+                return RedirectToAction("Error", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
     }
 }

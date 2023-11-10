@@ -1,5 +1,6 @@
 ﻿namespace HumanCapitalManagementAPI.Controllers
 {
+    using System.Security.Claims;
     using Microsoft.AspNetCore.Mvc;
 
     using HumanCapitalManagementApp.ViewModels.QualificationTraining;
@@ -10,6 +11,7 @@
     public class APIQualificationTrainingController : ControllerBase
     {
         private readonly IQualificationTrainingService qualificationTrainingService;
+        private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         public APIQualificationTrainingController(IQualificationTrainingService qualificationTrainingService)
         {
@@ -92,6 +94,52 @@
                     return NotFound("Invalid identifier");
                 }
                 await this.qualificationTrainingService.DeleteTrainingAsync(id);
+                return Ok("Success");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("Join/{id}")]
+        public async Task<IActionResult> Join(int id)
+        {
+            int employeeId = int.Parse(GetUserId());
+            try
+            {
+                var trainingToJoin = await qualificationTrainingService.GetTrainingByIdAsync(id);
+                var model = await qualificationTrainingService.GetJoinedTrainings(employeeId);
+
+                if (model.Any(m => m.Id == id))
+                {
+                    return BadRequest("You have already joined");
+                }
+
+                await this.qualificationTrainingService.JoinToTrainingAsync(id, trainingToJoin);
+                return Ok("Success");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("Leave/{id}")]
+        public async Task<IActionResult> Leave(int id)
+        {
+            try
+            {
+                var trainingToLeave = await qualificationTrainingService.GetTrainingByIdAsync(id);
+
+                if (trainingToLeave == null)
+                {
+                    return NotFound("Invalid identifier");
+                }
+                int employeeId = int.Parse(GetUserId());
+                await qualificationTrainingService.LeaveFromTrainingAsync(employeeId, trainingToLeave);
                 return Ok("Success");
             }
             catch (Exception ex)
