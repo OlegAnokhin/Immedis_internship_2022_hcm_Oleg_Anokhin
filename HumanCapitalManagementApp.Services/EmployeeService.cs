@@ -1,4 +1,6 @@
-﻿namespace HumanCapitalManagementApp.Services
+﻿using HumanCapitalManagementApp.ViewModels.QualificationTraining;
+
+namespace HumanCapitalManagementApp.Services
 {
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
@@ -196,6 +198,31 @@
             employee.IsHired = false;
 
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<SalaryInfoModel> SalaryInfoByIdAsync(int employeeId)
+        {
+            Employee employee = await this.dbContext
+                .Employees
+                .Include(qt => qt.QualificationsTraining)
+                .FirstAsync(e => e.Id == employeeId);
+
+            var trainings = await dbContext
+                .TrainingParticipants
+                .Where(t => t.ParticipantId == employeeId)
+                .Select(t => new AllQualificationTrainingViewModel
+                {
+                    Id = t.TrainingId,
+                    Name = t.Training.Name,
+                    From = t.Training.From,
+                    To = t.Training.To,
+                    Description = t.Training.Description
+                })
+                .ToListAsync();
+            return new SalaryInfoModel
+            {
+                Trainings = trainings
+            };
         }
     }
 }

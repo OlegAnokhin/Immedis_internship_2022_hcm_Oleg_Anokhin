@@ -20,5 +20,7 @@
         Task SetIsHiredOnTrue(int id);
 
         Task SoftDeleteEmployeeByIdAsync(int id);
+
+        Task<SalaryInfoModel> SalaryInfoByIdAsync(int employeeId);
     }
 }

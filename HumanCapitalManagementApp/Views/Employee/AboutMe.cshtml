@@ -37,12 +37,17 @@
                 <p></p>
                 <p></p>
                 <p class="h5">Salary: <b>@Model.Salary</b></p>
+                <a asp-controller="Employee" asp-action="SalaryInfo" asp-route-id="@Model.EmployeeId">
+                    <div>
+                        <input type="submit" value="Salary Info" class="btn btn-secondary" />
+                    </div>
+                </a>
                 <p></p>
-                    <a class="mt-2" asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.EmployeeId">
-                        <div>
-                            <input type="submit" value="Edit" class="btn btn-secondary mb-2" />
-                        </div>
-                    </a>
+                <a class="mt-2" asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.EmployeeId">
+                    <div>
+                        <input type="submit" value="Edit" class="btn btn-secondary mb-2" />
+                    </div>
+                </a>
             </div>
         </div>
     </div>
