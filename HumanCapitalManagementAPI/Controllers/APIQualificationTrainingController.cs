@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace HumanCapitalManagementAPI.Controllers
+﻿namespace HumanCapitalManagementAPI.Controllers
 {
     using System.Security.Claims;
     using Microsoft.AspNetCore.Mvc;
@@ -13,7 +11,7 @@ namespace HumanCapitalManagementAPI.Controllers
     public class APIQualificationTrainingController : ControllerBase
     {
         private readonly IQualificationTrainingService qualificationTrainingService;
-        private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //private string GetUserId() => User.FindFirst(ClaimTypes.NameIdentifier).ToString();
 
         public APIQualificationTrainingController(IQualificationTrainingService qualificationTrainingService)
         {
@@ -130,7 +128,11 @@ namespace HumanCapitalManagementAPI.Controllers
         [Route("Join/{id}")]
         public async Task<IActionResult> Join(int id)
         {
-            int employeeId = int.Parse(GetUserId());
+            var employeeId = GetUserId();
+            if (employeeId == 0)
+            {
+                return NotFound("Invalid identifier");
+            }
             try
             {
                 var trainingToJoin = await qualificationTrainingService.GetTrainingByIdAsync(id);
@@ -162,7 +164,11 @@ namespace HumanCapitalManagementAPI.Controllers
                 {
                     return NotFound("Invalid identifier");
                 }
-                int employeeId = int.Parse(GetUserId());
+                var employeeId = GetUserId();
+                if (employeeId == 0)
+                {
+                    return NotFound("Invalid identifier");
+                }
                 await qualificationTrainingService.LeaveFromTrainingAsync(employeeId, trainingToLeave);
                 return Ok("Success");
             }
@@ -170,6 +176,22 @@ namespace HumanCapitalManagementAPI.Controllers
             {
                 return StatusCode(500, "Error: " + ex.Message);
             }
+        }
+
+        private int GetUserId()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+
+            var nameIdentifierClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (nameIdentifierClaim != null)
+            {
+                string userId = nameIdentifierClaim.Value;
+                int employeeId = int.Parse(userId);
+                return employeeId;
+            }
+
+            return 0;
         }
     }
 }
