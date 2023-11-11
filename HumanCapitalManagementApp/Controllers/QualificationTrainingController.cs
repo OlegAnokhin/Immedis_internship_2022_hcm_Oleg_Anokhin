@@ -1,5 +1,6 @@
 ﻿namespace HumanCapitalManagementApp.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
     using System.Net;
@@ -85,6 +86,7 @@
             return RedirectToAction("Error", "Home");
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public IActionResult Add()
         {
@@ -96,6 +98,7 @@
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Add(AllQualificationTrainingViewModel model)
         {

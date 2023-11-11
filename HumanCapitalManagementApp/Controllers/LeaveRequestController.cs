@@ -1,5 +1,6 @@
 ﻿namespace HumanCapitalManagementApp.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
     using System.Net;
@@ -17,7 +18,7 @@
             this.client.BaseAddress = baseAddress;
         }
 
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> AllForAdmin()
         {
             try

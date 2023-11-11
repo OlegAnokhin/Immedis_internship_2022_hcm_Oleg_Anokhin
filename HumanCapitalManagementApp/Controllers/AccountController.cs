@@ -129,15 +129,31 @@
 
         private async Task SetClaims(string token, Employee user)
         {
-            var claims = new List<Claim>
-            {
-                new(ClaimTypes.Email, user.Email),
-                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new(ClaimTypes.Name, user.UserName),
-                new(ClaimTypes.Authentication, token),
-                new(ClaimTypes.Hash, token)
-            };
+            var claims = new List<Claim>();
 
+            if (user.UserName == "admin")
+            {
+                claims = new List<Claim>
+                {
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new(ClaimTypes.Name, user.UserName),
+                    new(ClaimTypes.Authentication, token),
+                    new(ClaimTypes.Hash, token),
+                    new(ClaimTypes.Role, "Administrator")
+                };
+            }
+            else
+            {
+                claims = new List<Claim>
+                {
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new(ClaimTypes.Name, user.UserName),
+                    new(ClaimTypes.Authentication, token),
+                    new(ClaimTypes.Hash, token),
+                    new(ClaimTypes.Role, "Employee")
+
+                };
+            }
             var claimsIdentity = new ClaimsIdentity(
                 claims,
                 CookieAuthenticationDefaults.AuthenticationScheme);
