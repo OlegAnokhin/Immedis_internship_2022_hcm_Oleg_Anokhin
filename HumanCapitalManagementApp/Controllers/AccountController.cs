@@ -1,10 +1,11 @@
 ﻿namespace HumanCapitalManagementApp.Controllers
 {
+    using HumanCapitalManagementApp.Data.Models;
+
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json.Linq;
     using Newtonsoft.Json;
 
     using System.Net;
@@ -12,9 +13,10 @@
     using Models.Account;
     using System.Security.Claims;
 
+    [AllowAnonymous]
     public class AccountController : BaseController
     {
-        private Uri baseAddress = new Uri("http://localhost:5152");
+        private Uri baseAddress = new Uri("https://localhost:7237");
         HttpClient client;
 
         public AccountController()
@@ -24,7 +26,6 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Register()
         {
             HttpResponseMessage response = await client.GetAsync(client.BaseAddress + "APIAccount/Register");
@@ -41,7 +42,6 @@
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterFormModel model)
         {
             try
@@ -73,14 +73,12 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginFormModel model)
         {
             try
@@ -89,30 +87,18 @@
 
                 if (response.IsSuccessStatusCode)
                 {
-                    string json = await response.Content.ReadAsStringAsync();
-                    dynamic responseData = JObject.Parse(json);
-                    int employeeId = responseData.id;
-                    string token = responseData.Token;
-                    //string token = await responseData.Content.ReadAsStringAsync();
-                    //ClaimsIdentity identity = await responseData.Content.ReadAsStringAsync();
+                    var json = await response.Content.ReadAsStringAsync();
 
-                    HttpContext.Session.SetString("Token", token);
-                    Response.Cookies.Append("JWToken", token);
+                    var responseData = JsonConvert.DeserializeObject<dynamic>(json);
 
-                    //HttpResponseMessage responseToken =
-                    //    await client.PostAsJsonAsync(client.BaseAddress + "Token/Post", model);
+                    string token = responseData.jwttoken;
+                    Employee employee = JsonConvert.DeserializeObject<Employee>(responseData.employee.ToString());
 
-                    //if (responseToken.IsSuccessStatusCode)
-                    //{
-                    //    string token = await responseToken.Content.ReadAsStringAsync();
-                    //    Response.Cookies.Append("JWToken", token);
-                    //}
-                    //else
-                    //{
-                    //    return RedirectToAction("Error", "Home");
-                    //}
+                    await SetClaims(token, employee);
 
-                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId});
+                    int employeeId = employee.Id;
+
+                    return RedirectToAction("SuccessLogin", "Employee", new { EmployeeId = employeeId });
                 }
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {
@@ -137,9 +123,37 @@
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Response.Cookies.Delete("JWToken");
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private async Task SetClaims(string token, Employee user)
+        {
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Email, user.Email),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.Authentication, token),
+                new(ClaimTypes.Hash, token)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProp = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(10),
+                IsPersistent = true,
+                IssuedUtc = DateTimeOffset.UtcNow,
+                RedirectUri = Url.Action("Index", "Home")
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProp);
         }
     }
 }

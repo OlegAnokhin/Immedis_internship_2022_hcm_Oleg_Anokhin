@@ -8,7 +8,7 @@
 
     public class LeaveRequestController : BaseController
     {
-        private Uri baseAddress = new Uri("http://localhost:5152");
+        private Uri baseAddress = new Uri("https://localhost:7237");
         HttpClient client;
 
         public LeaveRequestController()

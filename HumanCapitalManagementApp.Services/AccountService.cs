@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace HumanCapitalManagementApp.Services
+﻿namespace HumanCapitalManagementApp.Services
 {
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
     using System.Data;
@@ -85,28 +84,59 @@ namespace HumanCapitalManagementApp.Services
             }
         }
 
-        //public async Task<bool> LoginEmployeeAsync(LoginFormModel model)
-        //{
-        //    var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
-
-        //    if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-        public async Task<(ClaimsIdentity Identity, string Token)> LoginEmployeeAsync(LoginFormModel model)
+        public async Task<(string, Employee)> LoginEmployeeAsync(LoginFormModel model)
         {
             var employee = await dbContext.Employees.SingleOrDefaultAsync(e => e.UserName == model.UserName);
 
             if (employee != null && VerifyPassword(model.Password, employee.HashedPassword))
             {
-                var identity = Authenticate(employee);
+                var claims = new List<Claim>();
 
-                var token = await GenerateJwtToken(model);
+                if (employee.UserName == "admin")
+                {
+                    claims = new List<Claim>
+                    {
+                        new (ClaimTypes.Name, employee.UserName),
+                        new (ClaimTypes.NameIdentifier, employee.Id.ToString()),
+                        new (ClaimTypes.Role, "Administrator"),
+                        new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                    };
+                }
+                else
+                {
+                    claims = new List<Claim>
+                    {
+                        new (ClaimTypes.Name, employee.UserName),
+                        new (ClaimTypes.NameIdentifier, employee.Id.ToString()),
+                        new (ClaimTypes.Role, "Employee"),
+                        new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                    };
+                }
 
-                return (identity, token);
+                //var employeeRoles = employee.EmployeeRoles
+                //    .Select(er => er.Role.Name)
+                //    .ToArray();
+
+                //foreach (var role in employeeRoles)
+                //{
+                //    authClaims.Add(new Claim(ClaimTypes.Role, role));
+                //}
+
+                //JwtSecurityToken token = GetToken(authClaims);
+
+                //Response response = GetResponse(token, findEmployee);
+
+                //return response;
+
+                //old try
+                //var identity = Authenticate(employee);
+
+                JwtSecurityToken token = GenerateJwtToken(claims);
+
+                var jwttoken = new JwtSecurityTokenHandler().WriteToken(token);
+
+
+                return (jwttoken, employee);
             }
             return (null, null);
         }
@@ -122,74 +152,63 @@ namespace HumanCapitalManagementApp.Services
             return employee.Id;
         }
 
-        private ClaimsIdentity Authenticate(Employee employee)
+        //private ClaimsIdentity Authenticate(Employee employee)
+        //{
+        //    var claims = new List<Claim>();
+
+        //    if (employee.UserName == "admin")
+        //    {
+        //        claims = new List<Claim>
+        //        {
+        //            new (ClaimTypes.Name, employee.UserName),
+        //            new (ClaimTypes.NameIdentifier, employee.Id.ToString()),
+        //            new (ClaimTypes.Role, "Administrator")
+        //        };
+
+        //        return new ClaimsIdentity(claims, "ApplicationCookie",
+        //            ClaimsIdentity.DefaultNameClaimType,
+        //            ClaimsIdentity.DefaultRoleClaimType);
+        //    }
+        //    else
+        //    {
+        //        claims = new List<Claim>
+        //    {
+        //        new (ClaimTypes.Name, employee.UserName),
+        //            new (ClaimTypes.NameIdentifier, employee.Id.ToString()),
+        //        new (ClaimTypes.Role, "Employee")
+        //    };
+
+        //        return new ClaimsIdentity(claims, "ApplicationCookie",
+        //                   ClaimsIdentity.DefaultNameClaimType,
+        //                   ClaimsIdentity.DefaultRoleClaimType);
+        //    }
+        //}
+
+        private JwtSecurityToken GenerateJwtToken(List<Claim> claims)
         {
-            var claims = new List<Claim>();
+            //var claims = new[]
+            //{
+            //    new Claim(JwtRegisteredClaimNames.Sub, config["Jwt:Subject"]),
+            //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            //    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+            //    new Claim("Id", user.Id.ToString()),
+            //    new Claim("UserName", user.UserName),
+            //    new Claim("Password", user.HashedPassword)
+            //};
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
 
-            if (employee.UserName == "admin")
-            {
-                claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "Administrator")
-                };
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                return new ClaimsIdentity(claims, "ApplicationCookie",
-                    ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-            }
-            else
-            {
-                claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, employee.UserName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, "Employee")
-            };
+            var token = new JwtSecurityToken(
+                config["Jwt:Issuer"],
+                config["Jwt:Audience"],
+                expires: DateTime.UtcNow.AddMinutes(60),
+                claims: claims,
+                signingCredentials: signIn);
 
-                return new ClaimsIdentity(claims, "ApplicationCookie",
-                           ClaimsIdentity.DefaultNameClaimType,
-                           ClaimsIdentity.DefaultRoleClaimType);
-            }
+            return (token);
         }
 
-        private async Task<string> GenerateJwtToken(LoginFormModel model)
-        {
-            if (model != null && model.UserName != null && model.Password != null)
-            {
-                var user = await GetUser(model.UserName);
-                if (user != null)
-                {
-                    var claims = new[]
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, config["Jwt:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("Id", user.Id.ToString()),
-                        new Claim("UserName", user.UserName),
-                        new Claim("Password", user.HashedPassword)
-                    };
-
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                    var token = new JwtSecurityToken(
-                        config["Jwt:Issuer"],
-                        config["Jwt:Audience"],
-                        claims,
-                        expires: DateTime.UtcNow.AddMinutes(60),
-                        signingCredentials: signIn);
-                    return (new JwtSecurityTokenHandler().WriteToken(token));
-                }
-                else
-                {
-                    throw new InvalidExpressionException("Unexpected error.");
-                }
-            }
-            else
-            {
-                throw new InvalidExpressionException("Unexpected error.");
-            }
-        }
         private bool VerifyPassword(string inputPassword, string hashedPassword)
         {
             return BCrypt.Verify(inputPassword, hashedPassword);

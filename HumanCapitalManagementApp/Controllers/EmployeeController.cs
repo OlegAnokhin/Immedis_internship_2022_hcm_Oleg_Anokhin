@@ -9,7 +9,7 @@
 
     public class EmployeeController : BaseController
     {
-        private Uri baseAddress = new Uri("http://localhost:5152");
+        private Uri baseAddress = new Uri("https://localhost:7237");
         HttpClient client;
 
         public EmployeeController()
@@ -18,7 +18,7 @@
             this.client.BaseAddress = baseAddress;
         }
 
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync(client.BaseAddress + $"APIEmployee/All", queryModel);
@@ -191,12 +191,6 @@
             }
 
             return RedirectToAction("Error", "Home");
-        }
-
-        [HttpGet]
-        public IActionResult QualificationTraining()
-        {
-            return View();
         }
     }
 }
