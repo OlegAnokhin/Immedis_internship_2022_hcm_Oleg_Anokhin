@@ -19,9 +19,6 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
                         @* @if (User.IsInRole("Administrator"))
                         { *@
                         <li class="nav-item">
@@ -30,22 +27,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="AllForAdmin">All Leave Requests</a>
                         </li>
+                        @* } *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="QualificationTraining" asp-action="All">All Qualification Training</a>
                         </li>
-                        @* } *@
                     </ul>
-                    @* @if (!User?.Identity?.IsAuthenticated ?? false)
-                    { *@
-                    <partial name="_LoginPartial" />
-                    @* }
-                    else
-                    { *@
-                    <div>
-                        <a asp-area="" asp-controller="Account" asp-action="Logout"
-                           class="btn btn-secondary ">Logout </a>
-                    </div>
-                    @* } *@
+                    <ul class="navbar-nav flex-grow">
+                        @if (!User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <partial name="_LoginPartial" />
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
