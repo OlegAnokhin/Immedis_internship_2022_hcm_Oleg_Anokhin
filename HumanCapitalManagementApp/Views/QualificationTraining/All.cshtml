@@ -6,9 +6,12 @@
 
 <hr />
 
-<a asp-controller="QualificationTraining" asp-action="Add" class="btn btn-secondary col-2 p-2 fw-bold border-2">Add training</a>
-<p></p>
-<hr />
+@if (User.IsInRole("Administrator"))
+{
+    <a asp-controller="QualificationTraining" asp-action="Add" class="btn btn-secondary col-2 p-2 fw-bold border-2">Add training</a>
+    <p></p>
+    <hr />
+}
 
 @if (!Model.Any())
 {
