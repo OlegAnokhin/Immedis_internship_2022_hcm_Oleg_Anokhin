@@ -199,7 +199,10 @@
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("All", "QualificationTraining");
+                    string json = await response.Content.ReadAsStringAsync();
+                    int employeeId = JsonConvert.DeserializeObject<int>(json);
+
+                    return RedirectToAction("My", "QualificationTraining", new { id = employeeId });
                 }
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
@@ -230,7 +233,10 @@
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("All", "QualificationTraining");
+                    string json = await response.Content.ReadAsStringAsync();
+                    int employeeId = JsonConvert.DeserializeObject<int>(json);
+
+                    return RedirectToAction("My", "QualificationTraining",new { id = employeeId });
                 }
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {

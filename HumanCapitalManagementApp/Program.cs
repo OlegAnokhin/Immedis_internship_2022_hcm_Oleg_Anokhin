@@ -15,9 +15,16 @@ namespace HumanCapitalManagementApp
             
             builder.Services.AddMvc();
             
+            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie();
+
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
-            
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.Zero;
+                    options.SlidingExpiration = false;
+                });
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(

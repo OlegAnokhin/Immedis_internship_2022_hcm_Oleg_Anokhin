@@ -149,7 +149,7 @@
                 }
 
                 await this.qualificationTrainingService.JoinToTrainingAsync(id, trainingToJoin);
-                return Ok("Success");
+                return Ok(employeeId);
             }
             catch (Exception ex)
             {
@@ -182,7 +182,7 @@
                 }
 
                 await qualificationTrainingService.LeaveFromTrainingAsync(employeeId, trainingToLeave);
-                return Ok("Success");
+                return Ok(employeeId);
             }
             catch (Exception ex)
             {

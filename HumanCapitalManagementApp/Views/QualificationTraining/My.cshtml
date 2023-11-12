@@ -25,6 +25,11 @@ else
                         <p class="h5">To: <b>@t.To.ToShortDateString()</b></p>
                         <p class="h5">Description: <b>@t.Description</b></p>
                         <p></p>
+                        <a asp-controller="QualificationTraining" asp-action="Leave" asp-route-id="@t.Id" asp-route-additionalParam="@User?.Identity?.Name">
+                            <div>
+                                <input type="submit" value="Leave" class="btn btn-secondary border-2" style="margin-right: 0.5rem" />
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

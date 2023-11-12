@@ -36,12 +36,13 @@
                 <p class="h5">To: <b>@Model.To.ToShortDateString()</b></p>
                 <p></p>
                 <p></p>
-                <p class="h5">Salary: <b>@Model.Salary</b></p>
+                <p class="h5">Salary: @* <b>@Model.Salary</b></p> *@
                 <a asp-controller="Employee" asp-action="SalaryInfo" asp-route-id="@Model.EmployeeId">
                     <div>
                         <input type="submit" value="Salary Info" class="btn btn-secondary" />
                     </div>
-                </a>
+                    </a>
+                </p>
                 <p></p>
                 <a class="mt-2" asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.EmployeeId">
                     <div>
