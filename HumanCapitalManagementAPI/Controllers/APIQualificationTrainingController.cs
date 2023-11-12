@@ -148,7 +148,7 @@
                     return BadRequest("You have already joined");
                 }
 
-                await this.qualificationTrainingService.JoinToTrainingAsync(id, trainingToJoin);
+                await this.qualificationTrainingService.JoinToTrainingAsync(employeeId, trainingToJoin);
                 return Ok(employeeId);
             }
             catch (Exception ex)

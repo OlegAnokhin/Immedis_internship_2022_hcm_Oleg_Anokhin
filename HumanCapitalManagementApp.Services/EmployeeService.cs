@@ -220,7 +220,15 @@ namespace HumanCapitalManagementApp.Services
                 })
                 .ToListAsync();
 
-            decimal bonus = (decimal)trainings.Count * (decimal)100.00;
+            var completeTrainingsCount = 0;
+            foreach (var tr in trainings)
+            {
+                if (tr.To < DateTime.Today)
+                {
+                    completeTrainingsCount ++;
+                }
+            }
+            decimal bonus = (decimal)completeTrainingsCount * (decimal)100.00;
 
             return new SalaryInfoModel
             {
@@ -228,6 +236,7 @@ namespace HumanCapitalManagementApp.Services
                 Salary = employee.Salary,
                 Bonus = bonus,
                 TotalSalary = employee.Salary + bonus,
+                CompleteTrainingsCount = completeTrainingsCount,
                 Trainings = trainings
             };
         }

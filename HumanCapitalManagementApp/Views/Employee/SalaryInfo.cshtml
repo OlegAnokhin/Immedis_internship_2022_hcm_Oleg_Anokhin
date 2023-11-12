@@ -11,13 +11,24 @@
             <div class="card col-6 border-0">
                 @if (Model.Trainings.Any())
                 {
-                    <p class="h5">You have: <b>@Model.Trainings.Count() complete trainings.</b></p>
+                    <p class="h5">You're signed up for: <b>@Model.Trainings.Count()</b> trainings.</p>
+                    <p></p>
                 }
                 else
                 {
-                    <p class="h5">You don`t have complete trainings.</p>
+                    <p class="h5">You have not signed up for training.</p>
+                    <p></p>
                 }
-                <p></p>
+                @if (Model.CompleteTrainingsCount > 0)
+                {
+                    <p class="h5">You completed : <b>@Model.CompleteTrainingsCount trainings.</b></p>
+                    <p></p>
+                }
+                else
+                {
+                    <p class="h5">You haven't completed trainings.</p>
+                    <p></p>
+                }
                 <p class="h5">Salary: <b>@Model.Salary $</b></p>
                 <p></p>
                 <p class="h5">Bonus: <b>@Model.Bonus $</b></p>

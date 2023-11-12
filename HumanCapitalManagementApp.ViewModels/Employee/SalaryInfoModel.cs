@@ -18,6 +18,8 @@
 
         public decimal TotalSalary { get; set; }
 
+        public int CompleteTrainingsCount { get; set; }
+
         public IEnumerable<AllQualificationTrainingViewModel> Trainings { get; set; }
     }
 }
