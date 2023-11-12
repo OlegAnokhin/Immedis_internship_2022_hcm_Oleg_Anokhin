@@ -1,6 +1,5 @@
 ﻿namespace HumanCapitalManagementAPI.Controllers
 {
-    using System.Security.Claims;
     using Microsoft.AspNetCore.Mvc;
 
     using HumanCapitalManagementApp.ViewModels.QualificationTraining;
@@ -11,11 +10,11 @@
     public class APIQualificationTrainingController : ControllerBase
     {
         private readonly IQualificationTrainingService qualificationTrainingService;
-        //private string GetUserId() => User.FindFirst(ClaimTypes.NameIdentifier).ToString();
-
-        public APIQualificationTrainingController(IQualificationTrainingService qualificationTrainingService)
+        private readonly IAccountService accountService;
+        public APIQualificationTrainingController(IQualificationTrainingService qualificationTrainingService, IAccountService accountService)
         {
             this.qualificationTrainingService = qualificationTrainingService;
+            this.accountService = accountService;
         }
 
         [HttpGet]
@@ -125,16 +124,22 @@
         }
 
         [HttpPost]
-        [Route("Join/{id}")]
-        public async Task<IActionResult> Join(int id)
+        [Route("Join/{id}/{name}")]
+        public async Task<IActionResult> Join(int id, string name)
         {
-            var employeeId = GetUserId();
-            if (employeeId == 0)
-            {
-                return NotFound("Invalid identifier");
-            }
+            var employeeId = 0;
             try
             {
+                if (name != null)
+                {
+                    employeeId = await accountService.TakeIdByUsernameAsync(name);
+                }
+
+                if (employeeId == 0)
+                {
+                    return NotFound("Invalid identifier");
+                }
+
                 var trainingToJoin = await qualificationTrainingService.GetTrainingByIdAsync(id);
                 var model = await qualificationTrainingService.GetJoinedTrainings(employeeId);
 
@@ -153,9 +158,10 @@
         }
 
         [HttpPost]
-        [Route("Leave/{id}")]
-        public async Task<IActionResult> Leave(int id)
+        [Route("Leave/{id}/{name}")]
+        public async Task<IActionResult> Leave(int id, string name)
         {
+            var employeeId = 0;
             try
             {
                 var trainingToLeave = await qualificationTrainingService.GetTrainingByIdAsync(id);
@@ -164,11 +170,17 @@
                 {
                     return NotFound("Invalid identifier");
                 }
-                var employeeId = GetUserId();
+
+                if (name != null)
+                {
+                    employeeId = await accountService.TakeIdByUsernameAsync(name);
+                }
+
                 if (employeeId == 0)
                 {
                     return NotFound("Invalid identifier");
                 }
+
                 await qualificationTrainingService.LeaveFromTrainingAsync(employeeId, trainingToLeave);
                 return Ok("Success");
             }
@@ -176,22 +188,6 @@
             {
                 return StatusCode(500, "Error: " + ex.Message);
             }
-        }
-
-        private int GetUserId()
-        {
-            var identity = User.Identity as ClaimsIdentity;
-
-            var nameIdentifierClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (nameIdentifierClaim != null)
-            {
-                string userId = nameIdentifierClaim.Value;
-                int employeeId = int.Parse(userId);
-                return employeeId;
-            }
-
-            return 0;
         }
     }
 }

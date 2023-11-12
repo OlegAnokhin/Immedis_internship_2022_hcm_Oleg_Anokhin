@@ -190,12 +190,12 @@
             return RedirectToAction("Error", "Home");
         }
 
-        public async Task<IActionResult> Join(int id)
+        public async Task<IActionResult> Join(int id, string additionalParam)
         {
             try
             {
                 HttpResponseMessage response =
-                    await client.PostAsync(client.BaseAddress + $"APIQualificationTraining/Join/{id}", null);
+                    await client.PostAsync(client.BaseAddress + $"APIQualificationTraining/Join/{id}/{additionalParam}", null);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -221,12 +221,12 @@
             return RedirectToAction("Error", "Home");
         }
 
-        public async Task<IActionResult> Leave(int id)
+        public async Task<IActionResult> Leave(int id, string additionalParam)
         {
             try
             {
                 HttpResponseMessage response =
-                    await client.PostAsync(client.BaseAddress + $"APIQualificationTraining/Leave/{id}", null);
+                    await client.PostAsync(client.BaseAddress + $"APIQualificationTraining/Leave/{id}/{additionalParam}", null);
 
                 if (response.IsSuccessStatusCode)
                 {

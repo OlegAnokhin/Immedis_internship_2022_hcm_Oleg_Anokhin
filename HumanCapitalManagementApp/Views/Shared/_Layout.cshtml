@@ -28,9 +28,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="AllForAdmin">All Leave Requests</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="QualificationTraining" asp-action="All">All Qualification Training</a>
-                        </li>
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="QualificationTraining" asp-action="All">All Qualification Training</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav flex-grow">
                         @if (!User?.Identity?.IsAuthenticated ?? false)

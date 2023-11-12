@@ -31,12 +31,12 @@
                     </a>
                 }
                 <div class="d-inline-flex mt-2">
-                    <a asp-controller="QualificationTraining" asp-action="Join" asp-route-id="@Model.Id">
+                    <a asp-controller="QualificationTraining" asp-action="Join" asp-route-id="@Model.Id" asp-route-additionalParam="@User?.Identity?.Name">
                         <div>
                             <input type="submit" value="Join" class="btn btn-secondary border-2" style="margin-right: 0.5rem" />
                         </div>
                     </a>
-                    <a asp-controller="QualificationTraining" asp-action="Leave" asp-route-id="@Model.Id">
+                    <a asp-controller="QualificationTraining" asp-action="Leave" asp-route-id="@Model.Id" asp-route-additionalParam="@User?.Identity?.Name">
                         <div>
                             <input type="submit" value="Leave" class="btn btn-secondary border-2" style="margin-right: 0.5rem" />
                         </div>
