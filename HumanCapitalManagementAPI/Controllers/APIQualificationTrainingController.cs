@@ -4,6 +4,7 @@
 
     using HumanCapitalManagementApp.ViewModels.QualificationTraining;
     using HumanCapitalManagementApp.Services.Interfaces;
+    using HumanCapitalManagementApp.Services;
 
     [Route("[controller]")]
     [ApiController]
@@ -11,10 +12,13 @@
     {
         private readonly IQualificationTrainingService qualificationTrainingService;
         private readonly IAccountService accountService;
-        public APIQualificationTrainingController(IQualificationTrainingService qualificationTrainingService, IAccountService accountService)
+        private readonly IEmployeeService employeeService;
+
+        public APIQualificationTrainingController(IQualificationTrainingService qualificationTrainingService, IAccountService accountService, IEmployeeService employeeService)
         {
             this.qualificationTrainingService = qualificationTrainingService;
             this.accountService = accountService;
+            this.employeeService = employeeService;
         }
 
         [HttpGet]
@@ -39,7 +43,7 @@
         {
             try
             {
-                if (id == 0)
+                if (!await employeeService.ExistByIdAsync(id))
                 {
                     return NotFound("Invalid identifier");
                 }
@@ -135,7 +139,7 @@
                     employeeId = await accountService.TakeIdByUsernameAsync(name);
                 }
 
-                if (employeeId == 0)
+                if (!await employeeService.ExistByIdAsync(employeeId))
                 {
                     return NotFound("Invalid identifier");
                 }
@@ -176,7 +180,7 @@
                     employeeId = await accountService.TakeIdByUsernameAsync(name);
                 }
 
-                if (employeeId == 0)
+                if (!await employeeService.ExistByIdAsync(employeeId))
                 {
                     return NotFound("Invalid identifier");
                 }

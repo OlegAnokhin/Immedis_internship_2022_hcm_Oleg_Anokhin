@@ -35,7 +35,7 @@
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return RedirectToAction("Error", "Home");
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -64,13 +64,13 @@
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return RedirectToAction("Error", "Home");
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if(response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return RedirectToAction("Error", "Home");
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -108,13 +108,13 @@
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage);
-                    return View(model);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage);
-                    return RedirectToAction("Error", "Home");
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -143,7 +143,7 @@
                     {
                         string errorMessage = await response.Content.ReadAsStringAsync();
                         ModelState.AddModelError(string.Empty, errorMessage); ;
-                        return RedirectToAction("Error", "Home");
+                        TempData["ErrorMessage"] = errorMessage;
                     }
                 }
             }
@@ -152,7 +152,7 @@
                 TempData["ErrorMessage"] = "An unexpected error occurred";
                 return RedirectToAction("Error", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> Delete(int id)

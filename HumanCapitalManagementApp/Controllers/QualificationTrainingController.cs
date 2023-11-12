@@ -35,12 +35,14 @@
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -69,12 +71,14 @@
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -114,7 +118,8 @@
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -143,12 +148,14 @@
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -174,11 +181,13 @@
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -207,12 +216,20 @@
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage); 
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
+                }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)
@@ -241,12 +258,14 @@
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
             }
             catch (Exception)

@@ -22,7 +22,6 @@
         }
 
         [HttpPost]
-        //[Authorize]
         [Route("All")]
         public async Task<IActionResult> All([FromBody] AllEmployeesQueryModel queryModel)
         {
@@ -44,17 +43,16 @@
         }
 
         [HttpGet]
-        //[Authorize]
         [Route("SuccessLogin/{employeeId}")]
         public async Task<IActionResult> SuccessLogin(int employeeId)
         {
-            if (employeeId == 0)
-            {
-                return NotFound("Invalid identifier");
-            }
-
             try
             {
+                if (!await employeeService.ExistByIdAsync(employeeId))
+                {
+                    return NotFound("Invalid identifier");
+                }
+
                 var employeeModel = await this.employeeService.TakeEmployeeByIdAsync(employeeId);
 
                 return Ok(employeeModel);
@@ -66,18 +64,22 @@
         }
 
         [HttpGet]
-        //[Authorize(policy: "WebApi")]
         [Route("AboutMe/{employeeId}")]
         public async Task<IActionResult> AboutMe(int employeeId)
         {
-            if (employeeId == 0)
-            {
-                return NotFound("Invalid identifier");
-            }
-
             try
             {
+                if (!await employeeService.ExistByIdAsync(employeeId))
+                {
+                    return NotFound("Invalid identifier");
+                }
+
                 var employeeModel = await this.employeeService.TakeEmployeeInfoByIdAsync(employeeId);
+
+                if (employeeModel == null)
+                {
+                    return NotFound("Invalid identifier");
+                }
 
                 return Ok(employeeModel);
             }
@@ -88,18 +90,15 @@
         }
 
         [HttpGet]
-        //[Authorize]
         [Route("Edit/{employeeId}")]
         public async Task<IActionResult> Edit(int employeeId)
         {
-            bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
-
-            if (!employeeExist)
-            {
-                return NotFound("Invalid identifier");
-            }
             try
             {
+                if (!await employeeService.ExistByIdAsync(employeeId))
+                {
+                    return NotFound("Invalid identifier");
+                }
                 var employeeModel = await this.employeeService.TakeEmployeeForEditByIdAsync(employeeId);
 
                 employeeModel.Positions = await this.positionService.AllPositionsAsync();
@@ -114,18 +113,15 @@
         }
 
         [HttpPost]
-        //[Authorize]
         [Route("Edit/{employeeId}")]
         public async Task<IActionResult> Edit(int employeeId, [FromBody] EditEmployeeViewModel model)
         {
-            bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
-
-            if (!employeeExist)
-            {
-                return NotFound("Invalid identifier");
-            }
             try
             {
+                if (!await employeeService.ExistByIdAsync(employeeId))
+                {
+                    return NotFound("Invalid identifier");
+                }
                 if (!ModelState.IsValid)
                 {
                     model.Positions = await this.positionService.AllPositionsAsync();
@@ -144,18 +140,15 @@
         }
 
         [HttpPut]
-        //[Authorize]
         [Route("Delete/{employeeId}")]
         public async Task<IActionResult> Delete(int employeeId)
         {
-            bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
-
-            if (!employeeExist)
-            {
-                return NotFound("Invalid identifier");
-            }
             try
             {
+                if (!await employeeService.ExistByIdAsync(employeeId))
+                {
+                    return NotFound("Invalid identifier");
+                }
                 await this.employeeService.SoftDeleteEmployeeByIdAsync(employeeId);
 
                 return Ok("Success");
@@ -167,18 +160,15 @@
         }
 
         [HttpPut]
-        //[Authorize]
         [Route("Hire/{employeeId}")]
         public async Task<IActionResult> Hire(int employeeId)
         {
-            bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
-
-            if (!employeeExist)
-            {
-                return NotFound("Invalid identifier");
-            }
             try
             {
+                if (!await employeeService.ExistByIdAsync(employeeId))
+                {
+                    return NotFound("Invalid identifier");
+                }
                 await this.employeeService.SetIsHiredOnTrue(employeeId);
 
                 return Ok("Success");
@@ -195,12 +185,11 @@
         {
             try
             {
-                bool employeeExist = await this.employeeService.ExistByIdAsync(employeeId);
-
-                if (!employeeExist)
+                if (!await employeeService.ExistByIdAsync(employeeId))
                 {
                     return NotFound("Invalid identifier");
                 }
+
                 var model = await this.employeeService.SalaryInfoByIdAsync(employeeId);
 
                 return Ok(model);

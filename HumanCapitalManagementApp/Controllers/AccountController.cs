@@ -54,16 +54,17 @@
                 }
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {
-                    ModelState.AddModelError(string.Empty, "Username already exist.");
-                    return View(model);
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage); ;
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return View(model);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
-                return RedirectToAction("Register", "Account");
+                return RedirectToAction("Error", "Home");
             }
             catch (Exception)
             {
@@ -102,22 +103,23 @@
                 }
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {
-                    ModelState.AddModelError(string.Empty, "Username already exist.");
-                    return RedirectToAction("Error", "Home");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, errorMessage); ;
-                    return RedirectToAction("Error", "Home");
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                    TempData["ErrorMessage"] = errorMessage;
                 }
+                return RedirectToAction("Error", "Home");
             }
             catch (Exception)
             {
                 TempData["ErrorMessage"] = "Invalid username or password";
                 return RedirectToAction("Error", "Home");
             }
-            return RedirectToAction("Error", "Home");
         }
 
         public IActionResult Logout()
