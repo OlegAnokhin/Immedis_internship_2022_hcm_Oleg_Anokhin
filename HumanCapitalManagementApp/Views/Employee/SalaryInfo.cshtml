@@ -5,37 +5,34 @@
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
 
-<div class="row">
-    <div class="container" style="display:inline">
-        <div class="row">
-            <div class="card col-6 border-0">
-                @if (Model.Trainings.Any())
-                {
-                    <p class="h5">You're signed up for: <b>@Model.Trainings.Count()</b> trainings.</p>
-                    <p></p>
-                }
-                else
-                {
-                    <p class="h5">You have not signed up for training.</p>
-                    <p></p>
-                }
-                @if (Model.CompleteTrainingsCount > 0)
-                {
-                    <p class="h5">You completed : <b>@Model.CompleteTrainingsCount trainings.</b></p>
-                    <p></p>
-                }
-                else
-                {
-                    <p class="h5">You haven't completed trainings.</p>
-                    <p></p>
-                }
-                <p class="h5">Salary: <b>@Model.Salary $</b></p>
-                <p></p>
-                <p class="h5">Bonus: <b>@Model.Bonus $</b></p>
-                <p></p>
-                <p class="h5">Total Salary: <b>@Model.TotalSalary $</b></p>
-                <p></p>
-            </div>
-        </div>
+<div class="row text-center">
+    <div class="row">
+        @if (Model.Trainings.Any())
+        {
+            <p class="h5">You're signed up for: <b>@Model.Trainings.Count()</b> trainings.</p>
+            <p></p>
+        }
+        else
+        {
+            <p class="h5">You have not signed up for training.</p>
+            <p></p>
+        }
+        @if (Model.CompleteTrainingsCount > 0)
+        {
+            <p class="h5">You completed : <b>@Model.CompleteTrainingsCount trainings.</b></p>
+            <p></p>
+        }
+        else
+        {
+            <p class="h5">You haven't completed trainings.</p>
+            <p></p>
+        }
+        <p class="h5">Salary: <b>@Model.Salary $</b></p>
+        <p></p>
+        <p class="h5">Bonus: <b>@Model.Bonus $</b></p>
+        <p></p>
+        <p class="h5">Total Salary: <b>@Model.TotalSalary $</b></p>
+        <p></p>
     </div>
 </div>
+<hr />

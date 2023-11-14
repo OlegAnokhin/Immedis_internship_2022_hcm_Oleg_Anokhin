@@ -26,14 +26,14 @@
                     <a class="mt-2" asp-controller="QualificationTraining" asp-action="Delete" asp-route-id="@Model.Id">
                         <div>
                             <input type="submit" value="Delete"
-                                   class="btn btn-secondary m-2" onclick="return confirm('Are you sure you wan`t delete ?')" />
+                                   class="btn btn-secondary border-2" onclick="return confirm('Are you sure you wan`t delete ?')" />
                         </div>
                     </a>
                 }
-                <div class="d-inline-flex mt-2">
+                <div class="mt-2">
                     <a asp-controller="QualificationTraining" asp-action="Join" asp-route-id="@Model.Id" asp-route-additionalParam="@User?.Identity?.Name">
                         <div>
-                            <input type="submit" value="Join" class="btn btn-secondary border-2" style="margin-right: 0.5rem" />
+                            <input type="submit" value="Join" class="btn btn-secondary border-2"/>
                         </div>
                     </a>
                 </div>

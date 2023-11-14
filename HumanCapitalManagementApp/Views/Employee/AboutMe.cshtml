@@ -5,51 +5,48 @@
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
 
-<div class="row">
-    <div class="container" style="display:inline">
-        <div class="row">
-            <div class="card col-6 border-0">
-                <p class="h5">Username: <b>@Model.UserName</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">First name: <b>@Model.FirstName</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">Last name: <b>@Model.LastName</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">Email: <b>@Model.Email</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">Phone number: <b>@Model.PhoneNumber</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">Position: <b>@Model.Position</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">Department: <b>@Model.Department</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">From: <b>@Model.From.ToShortDateString()</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">To: <b>@Model.To.ToShortDateString()</b></p>
-                <p></p>
-                <p></p>
-                <p class="h5">Salary: @* <b>@Model.Salary</b></p> *@
-                <a asp-controller="Employee" asp-action="SalaryInfo" asp-route-id="@Model.EmployeeId">
-                    <div>
-                        <input type="submit" value="Salary Info" class="btn btn-secondary" />
-                    </div>
-                    </a>
-                </p>
-                <p></p>
-                <a class="mt-2" asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.EmployeeId">
-                    <div>
-                        <input type="submit" value="Edit" class="btn btn-secondary mb-2" />
-                    </div>
-                </a>
+<div class="row text-center">
+    <div class="row">
+        <p class="h5">Username: <b>@Model.UserName</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">First name: <b>@Model.FirstName</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">Last name: <b>@Model.LastName</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">Email: <b>@Model.Email</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">Phone number: <b>@Model.PhoneNumber</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">Position: <b>@Model.Position</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">Department: <b>@Model.Department</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">From: <b>@Model.From.ToShortDateString()</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">To: <b>@Model.To.ToShortDateString()</b></p>
+        <p></p>
+        <p></p>
+        <p class="h5">
+            Salary: @* <b>@Model.Salary</b></p> *@
+            <a asp-controller="Employee" asp-action="SalaryInfo" asp-route-id="@Model.EmployeeId">
+                <div>
+                    <input type="submit" value="Salary Info" class="btn btn-secondary" />
+                </div>
+            </a>
+        </p>
+        <p></p>
+        <a class="mt-2" asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.EmployeeId">
+            <div>
+                <input type="submit" value="Edit" class="btn btn-secondary mb-2" />
             </div>
-        </div>
+        </a>
     </div>
 </div>

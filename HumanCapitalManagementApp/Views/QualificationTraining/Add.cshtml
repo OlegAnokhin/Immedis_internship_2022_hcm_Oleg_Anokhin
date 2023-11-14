@@ -5,9 +5,9 @@
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
 
-<div class=" row">
-    <div class="col-md-4">
-        <form id="leaveForm" method="post">
+<div class="row justify-content-center">
+    <div class="col-md-5 text-center">
+        <form id="addForm" method="post">
             <h2>Create a new qualification training.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -31,7 +31,8 @@
                 <label asp-for="@Model.Description"></label>
                 <span asp-validation-for="@Model.Description" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-secondary">Add training</button>
+            <p></p>
+            <button type="submit" class="w-100 btn btn-lg btn btn-secondary">Add training</button>
         </form>
     </div>
 </div>
