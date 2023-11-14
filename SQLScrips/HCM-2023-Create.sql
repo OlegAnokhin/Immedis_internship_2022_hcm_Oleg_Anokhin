@@ -1,0 +1,98 @@
+USE [master]
+GO
+
+CREATE DATABASE [HCM-2023]
+GO
+
+USE [HCM-2023]
+GO
+
+CREATE TABLE [Roles]
+(
+	[Id] INT PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(max) NOT NULL,
+	[NormalizedName] NVARCHAR(max) NOT NULL,
+	[ConcurrencyStamp] NVARCHAR(max)
+)
+GO
+
+CREATE TABLE [Departments]
+(
+	[Id] INT PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(20) NOT NULL
+)
+GO
+
+CREATE TABLE [Positions]
+(
+	[Id] INT PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(20) NOT NULL
+)
+GO
+
+CREATE TABLE [Employees]
+(
+	[Id] INT PRIMARY KEY IDENTITY,
+	[UserName] NVARCHAR(20) NOT NULL,
+	[HashedPassword] NVARCHAR(max) NOT NULL,
+	[FirstName] NVARCHAR(20) NOT NULL,
+	[LastName] NVARCHAR(20) NOT NULL,
+	[Email] NVARCHAR(max) NOT NULL,
+	[PhoneNumber] NVARCHAR(max) NOT NULL,
+	[IsHired] BIT NOT NULL,
+	[HireDate] DATETIME2(7) NOT NULL,
+	[PositionId]  INT FOREIGN KEY REFERENCES [Positions]([Id]) ON DELETE CASCADE,
+	[Salary] DECIMAL(18, 2) NOT NULL,
+	[DepartmentId] INT FOREIGN KEY REFERENCES [Departments]([Id]) ON DELETE CASCADE
+)
+GO
+
+CREATE TABLE [UserRole]
+(
+	[UserId] INT NOT NULL FOREIGN KEY REFERENCES [Employees]([Id]) ON DELETE CASCADE,
+	[RoleId] INT NOT NULL FOREIGN KEY REFERENCES [Roles]([Id]) ON DELETE CASCADE,
+	PRIMARY KEY([UserId], [RoleId])
+)
+GO
+
+CREATE TABLE [LeaveRequests]
+(
+	[LeaveRequestId] INT PRIMARY KEY IDENTITY,
+	[EmployeeId] INT FOREIGN KEY REFERENCES [Employees]([Id]) ON DELETE CASCADE,
+	[StartDate] DATETIME2(7) NOT NULL,
+	[EndDate] DATETIME2(7) NOT NULL,
+	[VacationOrSickLeave] NVARCHAR(20) NOT NULL,
+	[Description] NVARCHAR(1024) NOT NULL,
+	[Approved] BIT NOT NULL
+)
+GO
+
+CREATE TABLE [PreviousPositions]
+(
+	[Id] INT PRIMARY KEY IDENTITY,
+	[DepartmentId] INT NOT NULL FOREIGN KEY REFERENCES [Departments]([Id]) ON DELETE CASCADE,
+	[PositionId] INT NOT NULL FOREIGN KEY REFERENCES [Positions]([Id]) ON DELETE CASCADE,
+	[From] DATETIME2(7) NOT NULL,
+	[To] DATETIME2(7) NOT NULL,
+	[Salary] DECIMAL(18, 2) NOT NULL,
+	[EmployeeId] INT NOT NULL FOREIGN KEY REFERENCES [Employees]([Id]) ON DELETE CASCADE
+)
+GO
+
+CREATE TABLE [QualificationsTraining]
+(
+	[Id] INT PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(20) NOT NULL,
+	[From] DATETIME2(7) NOT NULL,
+	[To] DATETIME2(7) NOT NULL,
+	[Description] NVARCHAR(1024) NOT NULL,
+)
+GO
+
+CREATE TABLE [dbo].[TrainingParticipants]
+(
+	[ParticipantId]  INT NOT NULL FOREIGN KEY REFERENCES [Employees]([Id]) ON DELETE CASCADE,
+	[TrainingId]  INT NOT NULL FOREIGN KEY REFERENCES [QualificationsTraining]([Id]) ON DELETE CASCADE,
+	PRIMARY KEY([ParticipantId], [TrainingId])
+)
+GO
