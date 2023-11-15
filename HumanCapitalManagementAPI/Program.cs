@@ -73,6 +73,9 @@ namespace HumanCapitalManagementAPI
                 app.UseSwaggerUI();
             }
 
+            var scope = app.Services.CreateScope();
+            scope.ServiceProvider.GetService<HumanCapitalManagementAppDbContext>()?.Database.EnsureCreated();
+
             app.UseCors();
 
             app.UseHttpsRedirection();

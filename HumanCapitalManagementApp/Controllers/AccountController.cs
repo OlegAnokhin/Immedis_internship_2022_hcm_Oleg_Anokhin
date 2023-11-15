@@ -1,7 +1,5 @@
 ﻿namespace HumanCapitalManagementApp.Controllers
 {
-    using HumanCapitalManagementApp.Data.Models;
-
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
@@ -12,11 +10,14 @@
     using System.Net.Http;
     using Models.Account;
     using System.Security.Claims;
+    
+    using HumanCapitalManagementApp.Data.Models;
+    using Common;
 
     [AllowAnonymous]
     public class AccountController : BaseController
     {
-        private Uri baseAddress = new Uri("https://localhost:7237");
+        private Uri baseAddress = new Uri(GeneralAppConstants.baseAddress);
         HttpClient client;
 
         public AccountController()

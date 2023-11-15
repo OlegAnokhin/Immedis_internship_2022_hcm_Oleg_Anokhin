@@ -4,11 +4,22 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     using Models;
+    using Seeding;
 
     public class EmployeeEntityConfiguration : IEntityTypeConfiguration<Employee>
     {
+        private readonly UserSeeder seeder;
+
+        public EmployeeEntityConfiguration()
+        {
+            this.seeder = new UserSeeder();
+        }
+
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
+            builder
+                .HasData(this.seeder.GenerateEmployees());
+
             builder
                 .HasOne(e => e.Department)
                 .WithMany(d => d.Employees)

@@ -3,11 +3,13 @@
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
     using System.Net;
+
+    using Common;
     using ViewModels.PreviousPositions;
 
     public class PreviousPositionController : BaseController
     {
-        private Uri baseAddress = new Uri("https://localhost:7237");
+        private Uri baseAddress = new Uri(GeneralAppConstants.baseAddress);
         HttpClient client;
 
         public PreviousPositionController()
