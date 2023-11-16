@@ -1,5 +1,6 @@
 .backgroundImage {
-    background-image: url("https://img.freepik.com/free-vector/background-gradient-minimalist-design-modern_483537-2860.jpg?w=1380&t=st=1698916563~exp=1698917163~hmac=a5ab7454ca58c371fb58c35cfdfae479b241373d0648b9e7ed393779e789197b");
+    background-image: url("https://img.freepik.com/free-vector/gradient-background-green-tones_23-2148374530.jpg?w=1380&t=st=1700116453~exp=1700117053~hmac=c52f4c8a1e7d58197bf5e7f8aeeca485a6afcb845346eb28f928ce31152e645e");
+    /*background-color: aquamarine;*/
     background-size: cover;
     background-attachment: fixed
 }
