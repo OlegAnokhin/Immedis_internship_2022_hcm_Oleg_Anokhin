@@ -1,5 +1,32 @@
 # HumanCapitalManagementApp
 
+To make the project I used **ASP.NET MVC**, **ASP.NET API**, **Entity framework core**, **Bootstrap**, **HTML**, **CSS**, **Microsoft SQL Server**.
+
+# For the startup
+* You need to configure a default connection (DefaultConnection) and you can directly start it without applying base migrations.
+* Sample data has been added to the project in all categories and users, which will be loaded automatically.
+* Admin : admin and password AA11bb22
+* You can register a new user, the password must be at least 8 characters long and contain uppercase and lowercase letters and numbers
+
+# About the project:
+The project is a site for a company.
+There are 2 types of users admin and user.
+* The administrator has all rights, as well as additional pages where he can view and manage all registered users, leave requests and add and remove trainings.
+* The user has the right to view everything and edit his information, can add a previous position in the company, sign up for upcoming trainings and unsubscribe from them, create requests for vacation or sick leave.
+
+# Functions written
+* Implemented own registration and login.
+* Add authentication and authorization token.
+* Save and edit in database all kinds of types and variables.
+* Password and e-mail verification with REGEX.
+* Sort by department and position.
+* Sort by set quantity.
+* Search by name.
+* Sort by newest, oldest users.
+* Previous and next page.
+* Addition of bonus to basic salary after completion of training.
+* Approval of sick leave or leave.
+
 За направата на проекта съм ползвал **ASP.NET MVC**, **ASP.NET API**, **Entity framework core**,**Bootstrap**, **HTML**, **CSS**, **Microsoft SQL Server**.
 
 # За стартирането
@@ -27,5 +54,5 @@
 * Добавяне на бонус към основната заплата след изтичане на обучението.
 * Одобряване на болничен или отпуска.
 
-# Диаграма на базата
+# Diagram of the base
 ![2023-11-15](https://github.com/OlegAnokhin/Immedis_internship_2022_hcm_Oleg_Anokhin/assets/102062768/c763f940-4c8d-4199-99ae-5a2bc7e64e81)
