@@ -5,7 +5,7 @@ To make the project I used **ASP.NET MVC**, **ASP.NET API**, **Entity framework 
 # For the startup
 * You need to configure a default connection (DefaultConnection) and you can directly start it without applying base migrations.
 * Sample data has been added to the project in all categories and users, which will be loaded automatically.
-* Admin : admin and password AA11bb22
+* User admin : admin and password AA11bb22
 * You can register a new user, the password must be at least 8 characters long and contain uppercase and lowercase letters and numbers
 
 # About the project:
@@ -27,12 +27,11 @@ There are 2 types of users admin and user.
 * Addition of bonus to basic salary after completion of training.
 * Approval of sick leave or leave.
 
-За направата на проекта съм ползвал **ASP.NET MVC**, **ASP.NET API**, **Entity framework core**,**Bootstrap**, **HTML**, **CSS**, **Microsoft SQL Server**.
 
 # За стартирането
 * Трябва да си конфигурирате връзка по подразбиране(DefaultConnection) и можете направо да го стартирате без прилагане на миграции на базата.
 * В проекта има добавени примерни данни във всички категории и потребители, които ще се заредят автоматично.
-* Админ : admin и парола AA11bb22
+* Потребител админ : admin и парола AA11bb22
 * Може да си регистрирате нов потребител паролата трябва да е поне 8 символа и да съдържа малки и големи букви и цифри
 
 # За проекта:
