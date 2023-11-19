@@ -1,12 +1,17 @@
 ﻿@model SalaryInfoModel
 @{
     ViewData["Title"] = "My salary";
+    int years = Model.TimeWorked.Days / 365;
+    int months = Model.TimeWorked.Days % 365 / 30;
+    int days = Model.TimeWorked.Days % 365 % 30;
 }
 <h2 id="title" class="text-center">@ViewData["Title"]</h2>
 <hr />
 
 <div class="row text-center">
     <div class="row">
+        <p class="h5">Your Experience in the company: @years years, @months months, @days days.</p>
+        <p></p>
         @if (Model.Trainings.Any())
         {
             <p class="h5">You're signed up for: <b>@Model.Trainings.Count()</b> trainings.</p>

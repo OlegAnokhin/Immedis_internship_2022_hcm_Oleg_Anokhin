@@ -20,6 +20,8 @@
 
         public int CompleteTrainingsCount { get; set; }
 
+        public TimeSpan TimeWorked { get; set; }
+
         public IEnumerable<AllQualificationTrainingViewModel> Trainings { get; set; }
     }
 }

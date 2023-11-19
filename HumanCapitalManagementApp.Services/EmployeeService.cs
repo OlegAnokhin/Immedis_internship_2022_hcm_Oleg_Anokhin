@@ -228,7 +228,16 @@ namespace HumanCapitalManagementApp.Services
                     completeTrainingsCount ++;
                 }
             }
-            decimal bonus = (decimal)completeTrainingsCount * (decimal)100.00;
+
+            DateTime startDateTime = employee.HireDate;
+            DateTime currentDateTime = DateTime.Now;
+            TimeSpan timeWorked = currentDateTime - startDateTime;
+
+            decimal years = timeWorked.Days / 365;
+            int months = (timeWorked.Days % 365) / 30;
+            int days = (timeWorked.Days % 365) % 30;
+
+            decimal bonus = ((decimal)completeTrainingsCount + years) * (decimal)100.00;
 
             return new SalaryInfoModel
             {
@@ -237,6 +246,7 @@ namespace HumanCapitalManagementApp.Services
                 Bonus = bonus,
                 TotalSalary = employee.Salary + bonus,
                 CompleteTrainingsCount = completeTrainingsCount,
+                TimeWorked = timeWorked,
                 Trainings = trainings
             };
         }
