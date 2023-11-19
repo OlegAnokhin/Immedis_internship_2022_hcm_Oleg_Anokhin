@@ -19,6 +19,7 @@
             this.client.BaseAddress = baseAddress;
         }
 
+        [HttpGet]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> All([FromQuery] AllEmployeesQueryModel queryModel)
         {

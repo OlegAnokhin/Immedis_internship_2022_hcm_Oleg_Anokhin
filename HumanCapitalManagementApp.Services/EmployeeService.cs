@@ -1,7 +1,6 @@
-﻿using HumanCapitalManagementApp.ViewModels.QualificationTraining;
-
-namespace HumanCapitalManagementApp.Services
+﻿namespace HumanCapitalManagementApp.Services
 {
+
     using Microsoft.EntityFrameworkCore;
     using BCrypt.Net;
 
@@ -9,6 +8,7 @@ namespace HumanCapitalManagementApp.Services
     using Interfaces;
     using ViewModels.Employee;
     using ViewModels.Employee.Enums;
+    using ViewModels.QualificationTraining;
     using HumanCapitalManagementApp.Data;
     using HumanCapitalManagementApp.Data.Models;
 
